@@ -11,7 +11,7 @@ help: ## Display this help.
 # https://github.com/DavidAnson/markdownlint
 .PHONY: lint
 lint: ## Run markdownlint.
-	markdownlint **/*.md --disable MD013
+	markdownlint **/*.md --disable MD013 MD028
 
 ##@ Start
 
