@@ -8,6 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 01 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://leovct.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Build a Kubernetes operator in 10 minutes</title>
+      <link>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</link>
+      <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</guid>
+      <description>&lt;p&gt;You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
+If you want to know more, you&amp;rsquo;ve come to the right place!&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Hello World!</title>
       <link>https://leovct.github.io/posts/hello-world/</link>
       <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
