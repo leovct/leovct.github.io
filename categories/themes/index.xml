@@ -6,7 +6,17 @@
     <description>Recent content in themes on leovct.dev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 07 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://leovct.github.io/categories/themes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://leovct.github.io/categories/themes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Write tests for Kubernetes operators</title>
+      <link>https://leovct.github.io/posts/write-tests-for-kubernetes-operators/</link>
+      <pubDate>Mon, 01 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://leovct.github.io/posts/write-tests-for-kubernetes-operators/</guid>
+      <description>&lt;p&gt;You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s write some tests to use our operator in production!&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Build a Kubernetes operator in 10 minutes</title>
       <link>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</link>
@@ -15,16 +25,6 @@
       <guid>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</guid>
       <description>&lt;p&gt;You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
 If you want to know more, you&amp;rsquo;ve come to the right place!&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Hello World!</title>
-      <link>https://leovct.github.io/posts/hello-world/</link>
-      <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://leovct.github.io/posts/hello-world/</guid>
-      <description>&lt;p&gt;Hey! This is the first article of this blog.&lt;/p&gt;
-&lt;p&gt;Nothing very interesting to see here, it was just to test! :)&lt;/p&gt;</description>
     </item>
     
   </channel>

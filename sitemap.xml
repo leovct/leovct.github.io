@@ -8,34 +8,31 @@
     <loc>https://leovct.github.io/</loc>
     <lastmod>2022-12-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://leovct.github.io/categories/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leovct.github.io/tags/go/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://leovct.github.io/posts/hello-world/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leovct.github.io/tags/kubernetes/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leovct.github.io/posts/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leovct.github.io/categories/syntax/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leovct.github.io/tags/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://leovct.github.io/tags/test/</loc>
-    <lastmod>2022-07-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://leovct.github.io/categories/themes/</loc>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leovct.github.io/posts/write-tests-for-kubernetes-operators/</loc>
+    <lastmod>2022-08-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</loc>
     <lastmod>2022-07-07T00:00:00+00:00</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Write tests for Kubernetes operators | leovct.dev</title>
+
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
+<meta name="viewport" content="width=device-width,minimum-scale=1">
+<meta name="description" content="Learn how to write unit and e2e tests for Kubernetes operators">
+<meta name="generator" content="Hugo 0.107.0">
+
+
+  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+    <link rel="stylesheet" href="https://leovct.github.io/css/custom.css">
+  
+
+
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+
+
+
+
+
+
+
+  </head>
+
+  <body>
+    <nav class="navigation">
+	
+		<a href="/"> <span class="arrow">←</span>Home</a>
+	
+	<a href="/posts">Archive</a>
+	<a href="/tags">Tags</a>
+	<a href="/about">About</a>
+
+	
+
+	
+	  <a class="button" href="https://leovct.github.io/index.xml">Subscribe</a>
+	
+</nav>
+
+
+    <main class="main">
+      
+
+<section id="single">
+    <h1 class="title">Write tests for Kubernetes operators</h1>
+
+    <div class="tip">
+        <time datetime="2022-08-01 00:00:00 &#43;0000 UTC">Aug 1, 2022</time>
+        <span class="split">
+          ·
+        </span>
+        <span>
+          1916 words
+        </span>
+        <span class="split">
+          ·
+        </span>
+        <span>
+          9 minute read
+        </span>
+    </div>
+
+    
+    
+        
+  
+    <aside class="toc">
+      <details>
+          <summary>Table of Contents
+          </summary>
+          <div>
+              <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-different-types-of-tests">The Different Types of Tests</a></li>
+    <li><a href="#practical-work">Practical Work</a>
+      <ul>
+        <li><a href="#1-set-up-your-environment">1. Set up your environment</a></li>
+        <li><a href="#2-some-context-on-the-operator">2. Some context on the operator</a></li>
+        <li><a href="#3-unit-tests">3. Unit tests</a></li>
+        <li><a href="#4-integration-tests">4. Integration tests</a></li>
+      </ul>
+    </li>
+    <li><a href="#to-go-further">To Go Further</a></li>
+  </ul>
+</nav>
+          </div>
+      </details>
+    </aside>
+  
+
+
+    
+
+
+    <div class="content">
+      <p>You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!</p>
+<p>Let&rsquo;s write some tests to use our operator in production!</p>
+<figure><img src="fig-1-photo.png"
+         alt="Fig 1. Photo from Unsplash" width="600" height="350"/><figcaption>
+            <p>Fig 1. Photo from <a href="https://unsplash.com/photos/aYHzEnSEH-w" target="_blank" rel="noopener">Unsplash</a></p>
+        </figcaption>
+</figure>
+
+<p>In my previous <a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/" target="_blank" rel="noopener">article</a>, I showed how to build a Kubernetes operator in about ten minutes - but you must be quick haha! I’ve also described the functioning of an operator, the custom resource definition and custom resources, the controllers, and the manager. If you want to learn more about these concepts, I highly recommend you read the article.</p>
+<p>But now it’s time to write some tests to use our operator in production! It’s a subject in its own right that is less complicated than it seems. Most people don’t like writing tests, but they are necessary. They help to improve code quality, detect bugs, and save time and money. So, let’s do some testing!</p>
+<h2 id="the-different-types-of-tests">The Different Types of Tests <a href="#the-different-types-of-tests" class="anchor">🔗</a></h2><p>There are three major types of testing in software development: unit, integration, and end-to-end testing. It is even more complex than that in theory, but it gives an idea of what we’ll see in this article.</p>
+<ul>
+<li><strong>Unit tests</strong> are used to test small pieces of code, for example, methods or functions.</li>
+<li><strong>Integration tests</strong> are used to test the integration of the different parts of an application. For example, the functioning of an operator in a Kubernetes environment with an API server and other resources.</li>
+<li><strong>End-to-end tests</strong>, also known as e2e, aim to simulate a user’s step-by-step experience. They should cover the main functionalities of the application. In the practical work that follows, we’ll see how to write unit tests in Go as well as integration tests for Kubernetes controllers. It’s interesting, you’ll see!</li>
+</ul>
+<h2 id="practical-work">Practical Work <a href="#practical-work" class="anchor">🔗</a></h2><h3 id="1-set-up-your-environment">1. Set up your environment <a href="#1-set-up-your-environment" class="anchor">🔗</a></h3><p>I choose to use the <a href="https://book.kubebuilder.io/" target="_blank" rel="noopener">Kubebuilder</a> framework to build Kubernetes operators. It’s very easy to use, the documentation is easy to read, and it’s a battle-tested product. It’s one of the two most popular Go frameworks to build operators, along with <a href="https://sdk.operatorframework.io/" target="_blank" rel="noopener">Operator SDK</a>.</p>
+<p>I assume you already have the necessary tools to design an operator (<code>go</code>, <code>docker</code>, <code>kubectl</code>, <code>kubebuilder</code> and a small local Kubernetes cluster). But if this is not the case, I strongly recommend that you follow the following <a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/#1-set-up-your-environment" target="_blank" rel="noopener">installation steps</a> so that you can follow along with me during this tutorial.</p>
+<p>To focus only on the testing part, I have prepared a simple Kubernetes operator, designed with Kubebuilder. This practical work will be to write tests to validate that the operator’s code meets our expectations and ensure that it does not contain any bugs. I’m going to ask you to clone the project and move to the <code>operator-v2</code> branch so we all start from the same base.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone git@github.com:leovct/kubernetes-operator-tutorial.git <span style="color:#666">&amp;&amp;</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    <span style="color:#a2f">cd</span> kubernetes-operator-tutorial <span style="color:#666">&amp;&amp;</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    git checkout operator-v2 <span style="color:#666">&amp;&amp;</span> <span style="color:#b62;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#b62;font-weight:bold"></span>    git pull origin operator-v2
+</span></span></code></pre></div><p>If you try to run tests, you’ll see that the coverage equals 0%. Indeed, we haven’t written any tests yet! But this is going to change!</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make <span style="color:#a2f">test</span>
+</span></span><span style="display:flex;"><span>mkdir -p /Users/leovct/Documents/tutorial/bin
+</span></span><span style="display:flex;"><span><span style="color:#b8860b">GOBIN</span><span style="color:#666">=</span>/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName<span style="color:#666">=</span>manager-role crd webhook <span style="color:#b8860b">paths</span><span style="color:#666">=</span><span style="color:#b44">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#666">=</span>config/crd/bases
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile<span style="color:#666">=</span><span style="color:#b44">&#34;hack/boilerplate.go.txt&#34;</span> <span style="color:#b8860b">paths</span><span style="color:#666">=</span><span style="color:#b44">&#34;./...&#34;</span>
+</span></span><span style="display:flex;"><span>go fmt ./...
+</span></span><span style="display:flex;"><span>go vet ./...
+</span></span><span style="display:flex;"><span><span style="color:#b8860b">GOBIN</span><span style="color:#666">=</span>/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
+</span></span><span style="display:flex;"><span><span style="color:#b8860b">KUBEBUILDER_ASSETS</span><span style="color:#666">=</span><span style="color:#b44">&#34;/Users/leovct/Library/Application Support/io.kubebuilder.envtest/k8s/1.23.5-darwin-amd64&#34;</span> go <span style="color:#a2f">test</span> ./... -coverprofile cover.out
+</span></span><span style="display:flex;"><span>?       my.domain/tutorial      <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>?       my.domain/tutorial/api/v1       <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>?       my.domain/tutorial/color        <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>ok      my.domain/tutorial/controllers  6.220s  coverage: 0.0% of statements
+</span></span></code></pre></div><h3 id="2-some-context-on-the-operator">2. Some context on the operator <a href="#2-some-context-on-the-operator" class="anchor">🔗</a></h3><p>The “Foo” operator you cloned is similar to the one I built in my “<a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/" target="_blank" rel="noopener">Build a Kubernetes Operator in 10 minutes</a>” article. It has no real purpose except to show how you can use operators to perform simple tasks in Kubernetes.</p>
+<p>How does the operator work?</p>
+<p>Because a diagram explains ideas way better than three paragraphs, here it is.</p>
+<figure><img src="fig-2-foo-operator-overview.png"
+         alt="Fig 2. Overview of the operator&amp;rsquo;s functioning" width="600" height="300"/><figcaption>
+            <p>Fig 2. Overview of the operator&rsquo;s functioning</p>
+        </figcaption>
+</figure>
+
+<p>First, there is the Foo Custom Resource Definition or CRD (see <code>api/v1/foo_types.go</code>). It has a <code>name</code> field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a Pod with the same name as his friend), its <code>happy</code> status will be set to <code>true</code>. A small addition since the previous tutorial, the status of Foo also contains a <code>color</code> field, determined according to its name and the namespace in which it evolves.</p>
+<p>Second, there is the Foo Controller (see <code>controllers/foo_controller.go</code>). It fetches the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, it lists all the pods with the same name as Foo’s friend. If at least one friend has been found, it updates Foo’s <code>happy</code> status to <code>true</code>, else we set it to <code>false</code>. It also updates Foo’s <code>color</code> status.</p>
+<p>Note that the controller also reacts to Pod events (see <code>mapPodsReqToFooReq</code>). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the Pod&rsquo;s name is a “friend” of one of the Foo custom resources deployed in the cluster.</p>
+<p>Now that we know how the operator works, we can get on with testing it.</p>
+<h3 id="3-unit-tests">3. Unit tests <a href="#3-unit-tests" class="anchor">🔗</a></h3><p>At this stage, we will test small pieces of code like methods and functions. Of course, we won’t test the controller <code>Reconcile</code> method here because it involves setting up a testing Kubernetes environment with a local Kubernetes API server, the CRD, the controller, the manager, etc. We’ll see this in the 4. Integration tests section instead.</p>
+<p>What are we going to test then? If you take the time to read the code of the Foo controller, you’ll notice that I use the <code>ConvertStrToColor</code> function from the <code>color</code> package to update Foo’s <code>color</code> status. Let’s write the unit tests of this simple method!</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/786b5c520dbbfaa60d16b5897b0532fb.js"></script>
+
+<p>Our goal here is to make sure that the function returns what is expected given the input parameters. Here are the three tests I’d like to write to test this function:</p>
+<ol>
+<li>Convert an empty string to a colour of the colour wheel.</li>
+<li>Convert a short string to a colour of the colour wheel.</li>
+<li>Convert a very long string (with numbers and dashes) to a colour of the colour wheel.</li>
+</ol>
+<p>To write unit tests in Go, you create a list of tests describing the name, input parameters and expected result. Then you run a loop and compare the function&rsquo;s output with the expected result. Here is my test function to check that <code>ConvertStrToColor</code> works correctly:</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/e0d7563e278c1a4d25ea3e823d3515aa.js"></script>
+
+<p>Now, if you attempt to run the tests a second time, you’ll see that the code coverage of the <code>color</code> package is equal to 100%! Awesome, we did it! The function works as expected.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make <span style="color:#a2f">test</span>
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName<span style="color:#666">=</span>manager-role crd webhook <span style="color:#b8860b">paths</span><span style="color:#666">=</span><span style="color:#b44">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#666">=</span>config/crd/bases
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile<span style="color:#666">=</span><span style="color:#b44">&#34;hack/boilerplate.go.txt&#34;</span> <span style="color:#b8860b">paths</span><span style="color:#666">=</span><span style="color:#b44">&#34;./...&#34;</span>
+</span></span><span style="display:flex;"><span>go fmt ./...
+</span></span><span style="display:flex;"><span>go vet ./...
+</span></span><span style="display:flex;"><span><span style="color:#b8860b">KUBEBUILDER_ASSETS</span><span style="color:#666">=</span><span style="color:#b44">&#34;/Users/leovct/Library/Application Support/io.kubebuilder.envtest/k8s/1.23.5-darwin-amd64&#34;</span> go <span style="color:#a2f">test</span> ./... -coverprofile cover.out
+</span></span><span style="display:flex;"><span>?       my.domain/tutorial      <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>?       my.domain/tutorial/api/v1       <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>ok      my.domain/tutorial/color        0.306s  coverage: 100.0% of statements
+</span></span><span style="display:flex;"><span>ok      my.domain/tutorial/controllers  6.626s  coverage: 0.0% of statements
+</span></span></code></pre></div><p>Now, let’s get down to business. We’re going to test how the operator’s reconciliation loop! Trust me, this is the most interesting part of the article!</p>
+<h3 id="4-integration-tests">4. Integration tests <a href="#4-integration-tests" class="anchor">🔗</a></h3><p>Kubebuilder provided a test boilerplate (see <code>controllers/suite_test.go</code>) that sets up a testing environment with a local Kubernetes API server. The only thing we need to do is first instantiate and run the controller and then write tests with <a href="https://onsi.github.io/ginkgo/" target="_blank" rel="noopener">Ginkgo</a> (framework used by Kubebuilder) to verify that our operator behaves well when it evolves in a Kubernetes environment.</p>
+<p>Of course, this test environment is very simple and often does not represent the environment of a production cluster. This is why running the operator’s tests in an existing cluster is also possible to get closer to a real production environment. You can learn more about that <a href="https://book.kubebuilder.io/reference/envtest.html" target="_blank" rel="noopener">here</a>.</p>
+<p>First, we’ll need to instantiate and start the Foo controller. To do this, we need to create another client. Why do we need two clients? Because when running tests, you want to assert against the live state of the API server. If you use the client from the manager in your tests, you’d end up asserting against the content of the cache instead. First, this is slower. Second, this can introduce flaws. That’s why we’ve got two clients: <code>k8sclient</code>, the client we’ll use in our tests, and <code>k8sManager.getClient()</code>, the manager&rsquo;s client.</p>
+<p>Here is the modified source code of the test environment setup.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/47dceaf7d524ae7be9850ad8ae02b791.js"></script>
+
+<p>Now that our test environment is properly set up, we can write integration tests! Let’s create a new test file called <code>foo_controller_test.go</code> under the <code>controllers</code> folder. In this file, we’ll define our tests using the Ginkgo framework. Here’s a simple test example that creates two Foo custom resources and ensures that the resources have been created.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/025628faea88b93c561f490d2a1e51f2.js"></script>
+
+<p>Great! Now let’s write a test that creates a pod with the same name as one of the Foo custom resources’ friends. The controller should update the status of the custom resource and set it to <code>true</code>. The other custom resource should still have its status set to <code>false</code>.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/b65dcf88ae6218f1d9fa7e7cc1d6502a.js"></script>
+
+<p>Let’s write another test that updates the name of the second Foo custom resource’s friend to the name of the previously created pod. The controller should update the status of the custom resource and set it to <code>true</code>. Again, the other custom resource should still have its status set to <code>false</code>.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/0f7398a6facaf18451a91ce68891cf8f.js"></script>
+
+<p>Our final test for today will be to delete the pod we created and check that the controller updates the status of all the custom resources to <code>false</code>.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/d1d2c55cdd54bce15312807940d76217.js"></script>
+
+<p>These are fairly simple tests, but they show you the possibilities. You can do very complex things using the various tools provided by Ginkgo. If you paid attention during the tutorial, you should have seen various instructions such as <code>Expect</code>, <code>Eventually</code>, or <code>Consistently</code>, which are very useful methods to test the behaviour of the operator and the resources running in Kubernetes.</p>
+<p>We’ve written many great tests that cover our controller&rsquo;s scope. Now it’s time to run them to see if the operator passes them all.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make <span style="color:#a2f">test</span>
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName<span style="color:#666">=</span>manager-role crd webhook <span style="color:#b8860b">paths</span><span style="color:#666">=</span><span style="color:#b44">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#666">=</span>config/crd/bases
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile<span style="color:#666">=</span><span style="color:#b44">&#34;hack/boilerplate.go.txt&#34;</span> <span style="color:#b8860b">paths</span><span style="color:#666">=</span><span style="color:#b44">&#34;./...&#34;</span>
+</span></span><span style="display:flex;"><span>go fmt ./...
+</span></span><span style="display:flex;"><span>go vet ./...
+</span></span><span style="display:flex;"><span><span style="color:#b8860b">KUBEBUILDER_ASSETS</span><span style="color:#666">=</span><span style="color:#b44">&#34;/Users/leovct/Library/Application Support/io.kubebuilder.envtest/k8s/1.23.5-darwin-amd64&#34;</span> go <span style="color:#a2f">test</span> ./... -coverprofile cover.out
+</span></span><span style="display:flex;"><span>?    my.domain/tutorial <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>?    my.domain/tutorial/api/v1 <span style="color:#666">[</span>no <span style="color:#a2f">test</span> files<span style="color:#666">]</span>
+</span></span><span style="display:flex;"><span>ok   my.domain/tutorial/color 0.077s coverage: 100.0% of statements
+</span></span><span style="display:flex;"><span>ok   my.domain/tutorial/controllers 8.434s coverage: 82.4% of statements
+</span></span></code></pre></div><p>Nice, we’ve got no errors! In addition, we went from 0% coverage to over 82%! The last 18% corresponds to the parts of the code that we can’t test (or maybe using mocks but it would be a lot of work for not much). For example, when the controller can’t find the custom resource that triggered the reconciliation loop or when it can’t list the pods in the cluster. It doesn’t matter because we know that we have tested all the operator’s scope.</p>
+<p>Here’s the link to the <a href="https://github.com/leovct/kubernetes-operator-tutorial" target="_blank" rel="noopener">GitHub repository</a> if you need to browse the code. The <code>operator-v2 branch</code> contains the source code of the operator without the tests, while the tests branch contains the source code with all the tests.</p>
+<h2 id="to-go-further">To Go Further <a href="#to-go-further" class="anchor">🔗</a></h2><p>We’ve seen how to write unit tests and integration tests for Kubernetes controllers using the Ginkgo framework. It is a crucial step in developing Kubernetes operators as it allows for validating the correct functioning of the reconciliation logic.</p>
+<p>Also, here’s a list of resources you can use to dig deeper into the subject.</p>
+<ul>
+<li><a href="https://book.kubebuilder.io/cronjob-tutorial/writing-tests.html" target="_blank" rel="noopener">https://book.kubebuilder.io/cronjob-tutorial/writing-tests.html</a></li>
+<li><a href="https://book.kubebuilder.io/reference/envtest.html" target="_blank" rel="noopener">https://book.kubebuilder.io/reference/envtest.html</a></li>
+<li><a href="http://onsi.github.io/ginkgo" target="_blank" rel="noopener">http://onsi.github.io/ginkgo</a></li>
+</ul>
+<p>Have fun! :)</p>
+<p><em>NB: This article was published on Medium in Better Programming, you can find it <a href="https://medium.com/better-programming/write-tests-for-your-kubernetes-operator-d3d6a9530840" target="_blank" rel="noopener">here</a></em>.</p>
+    </div>
+
+    
+        <div class="tags">
+            
+                <a href="https://leovct.github.io/tags/kubernetes">kubernetes</a>
+            
+                <a href="https://leovct.github.io/tags/go">go</a>
+            
+        </div>
+    
+    
+    
+
+</section>
+
+
+    </main>
+    
+    <footer id="footer">
+    
+        <div id="social">
+
+
+    <a class="symbol" href="https://github.com/leovct/" rel="me" target="_blank">
+        
+        <svg fill="#bbbbbb" width="28" height="28"  viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <title>Github</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)">
+            <g id="Github" transform="translate(264.000000, 939.000000)">
+                <path d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z" id="Rounded" fill="#bbbbbb"></path>
+                <path d="M35.9985,13 C22.746,13 12,23.7870921 12,37.096644 C12,47.7406712 18.876,56.7718301 28.4145,59.9584121 C29.6145,60.1797862 30.0525,59.4358488 30.0525,58.7973276 C30.0525,58.2250681 30.0315,56.7100863 30.0195,54.6996482 C23.343,56.1558981 21.9345,51.4693938 21.9345,51.4693938 C20.844,48.6864054 19.2705,47.9454799 19.2705,47.9454799 C17.091,46.4500754 19.4355,46.4801943 19.4355,46.4801943 C21.843,46.6503662 23.1105,48.9634994 23.1105,48.9634994 C25.2525,52.6455377 28.728,51.5823398 30.096,50.9649018 C30.3135,49.4077535 30.9345,48.3460615 31.62,47.7436831 C26.2905,47.1352808 20.688,45.0691228 20.688,35.8361671 C20.688,33.2052792 21.6225,31.0547881 23.1585,29.3696344 C22.911,28.7597262 22.0875,26.3110578 23.3925,22.9934585 C23.3925,22.9934585 25.4085,22.3459017 29.9925,25.4632101 C31.908,24.9285993 33.96,24.6620468 36.0015,24.6515052 C38.04,24.6620468 40.0935,24.9285993 42.0105,25.4632101 C46.5915,22.3459017 48.603,22.9934585 48.603,22.9934585 C49.9125,26.3110578 49.089,28.7597262 48.8415,29.3696344 C50.3805,31.0547881 51.309,33.2052792 51.309,35.8361671 C51.309,45.0917119 45.6975,47.1292571 40.3515,47.7256117 C41.2125,48.4695491 41.9805,49.9393525 41.9805,52.1877301 C41.9805,55.4089489 41.9505,58.0067059 41.9505,58.7973276 C41.9505,59.4418726 42.3825,60.1918338 43.6005,59.9554002 C53.13,56.7627944 60,47.7376593 60,37.096644 C60,23.7870921 49.254,13 35.9985,13" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>
+    </a>
+
+    <a class="symbol" href="https://twitter.com/leoovct" rel="me" target="_blank">
+        
+        <svg fill="#bbbbbb" width="28" height="28" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="438.536px" height="438.536px" viewBox="0 0 438.536 438.536" style="enable-background:new 0 0 438.536 438.536;"
+	 xml:space="preserve">
+<g>
+	<path d="M414.41,24.123C398.333,8.042,378.963,0,356.315,0H82.228C59.58,0,40.21,8.042,24.126,24.123
+		C8.045,40.207,0.003,59.576,0.003,82.225v274.084c0,22.647,8.042,42.018,24.123,58.102c16.084,16.084,35.454,24.126,58.102,24.126
+		h274.084c22.648,0,42.018-8.042,58.095-24.126c16.084-16.084,24.126-35.454,24.126-58.102V82.225
+		C438.532,59.576,430.49,40.204,414.41,24.123z M335.471,168.735c0.191,1.713,0.288,4.278,0.288,7.71
+		c0,15.989-2.334,32.025-6.995,48.104c-4.661,16.087-11.8,31.504-21.416,46.254c-9.606,14.749-21.074,27.791-34.396,39.115
+		c-13.325,11.32-29.311,20.365-47.968,27.117c-18.648,6.762-38.637,10.143-59.953,10.143c-33.116,0-63.76-8.952-91.931-26.836
+		c4.568,0.568,9.329,0.855,14.275,0.855c27.6,0,52.439-8.565,74.519-25.7c-12.941-0.185-24.506-4.179-34.688-11.991
+		c-10.185-7.803-17.273-17.699-21.271-29.691c4.947,0.76,8.658,1.137,11.132,1.137c4.187,0,9.042-0.76,14.56-2.279
+		c-13.894-2.669-25.598-9.562-35.115-20.697c-9.519-11.136-14.277-23.84-14.277-38.114v-0.571
+		c10.085,4.755,19.602,7.229,28.549,7.422c-17.321-11.613-25.981-28.265-25.981-49.963c0-10.66,2.758-20.747,8.278-30.264
+		c15.035,18.464,33.311,33.213,54.816,44.252c21.507,11.038,44.54,17.227,69.092,18.558c-0.95-3.616-1.427-8.186-1.427-13.704
+		c0-16.562,5.853-30.692,17.56-42.399c11.703-11.706,25.837-17.561,42.394-17.561c17.515,0,32.079,6.283,43.688,18.846
+		c13.134-2.474,25.892-7.33,38.26-14.56c-4.757,14.652-13.613,25.788-26.55,33.402c12.368-1.716,23.88-4.95,34.537-9.708
+		C357.458,149.793,347.462,160.166,335.471,168.735z"/>
+</g>
+</svg>
+
+    </a>
+
+
+</div>
+
+    
+
+    <div class="copyright">
+    
+       © Copyright 
+       2022 
+       <span class="split">
+        <svg fill="#bbbbbb" width="15" height="15" version="1.1" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 15 15">
+  <path d="M13.91,6.75c-1.17,2.25-4.3,5.31-6.07,6.94c-0.1903,0.1718-0.4797,0.1718-0.67,0C5.39,12.06,2.26,9,1.09,6.75&#xA;&#x9;C-1.48,1.8,5-1.5,7.5,3.45C10-1.5,16.48,1.8,13.91,6.75z"/>
+</svg>
+       </span>
+       Léo Vincent
+    
+    </div>
+
+    
+      <div class="powerby">
+        Powered by <a href='http://www.gohugo.io/'>Hugo</a> Theme By <a href='https://github.com/nodejh/hugo-theme-mini'>nodejh</a>
+      </div>
+    
+</footer>
+
+
+
+  </body>
+</html>
