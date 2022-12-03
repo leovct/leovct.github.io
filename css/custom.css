@@ -1,0 +1,24 @@
+/* Styling */
+p {
+	text-align: justify;
+}
+
+p code, code {
+	font-size: small;
+	background-color: #f8f8f8;
+}
+
+figcaption p {
+	font-size: small;
+	text-align: center;
+}
+
+/* Image hover effect */
+figure img {
+  opacity: 1;
+  -webkit-transition: .3s ease-in-out;
+  transition: .3s ease-in-out;
+}
+figure:hover img {
+  opacity: .9;
+}
