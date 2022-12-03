@@ -1,0 +1,37 @@
+# This workflow deploys a hugo server to Github Pages.
+
+---
+name: Deploy to Github
+
+on:
+  push:
+    branches:
+      - "*"
+    paths-ignore:
+      - '.gitignore'
+      - 'Makefile'
+      - 'README.md'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # fetch Hugo themes (true or recursive)
+          fetch-depth: 0    # fetch all history for .gitinfo and .lastmod
+
+      - name: Setup hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+
+      - name: Build website
+        run: hugo
+
+      - name: Deploy website
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

@@ -1,0 +1,61 @@
+baseURL: https://leovct.github.io/
+title: leovct.dev
+theme: github.com/nodejh/hugo-theme-mini
+
+languageCode: en-us
+defaultContentLanguage: en
+paginate: 3
+
+hasCJKLanguage: true
+permalinks:
+  posts: /posts/:title/
+
+# Hugo Configure Markup
+# More info: https://gohugo.io/getting-started/configuration-markup#
+markup:
+  highlight:
+    guessSyntax: true
+    style: emacs
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 2
+  goldmark:
+    renderer:
+      unsafe: true
+
+# Social links in footer (only github, twitter, stackoverflow and facebook)
+social:
+  github: https://github.com/leovct/
+  twitter: https://twitter.com/leoovct
+
+# Site parameters
+params:
+  author: Léo Vincent
+  bio: Software Engineer 🌱
+  description: My blog
+
+  ###########################################
+  # Optional Configuration
+  ###########################################
+  enableRSS: true
+  enableComments: false
+  showToc: true # table of contents
+  showPowerBy: true # powerBy message in the page footer
+  math: false # enable math typesetting
+  hiddenPostSummaryInHomePage: false # to hidden post summary in home page
+  copyright: '' # website copy write, default: '© Copyright 2021 ❤️ {params.author}'
+
+  # Extra links in navigation
+  links:
+    ## e.g.
+    # - name: Project
+    #   path: /project
+
+  # Custom css/js
+  customCSS:
+    - css/custom.css
+  customJS:
+    ## e.g.
+    # - js/custom.js # local js in `static/js/custom.js`
+    # - https://example.com/custom.js # remote js
