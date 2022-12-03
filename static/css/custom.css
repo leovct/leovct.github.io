@@ -13,12 +13,17 @@ figcaption p {
 	text-align: center;
 }
 
+figure {
+	text-align: center;
+}
+
 /* Image hover effect */
 figure img {
   opacity: 1;
   -webkit-transition: .3s ease-in-out;
   transition: .3s ease-in-out;
 }
+
 figure:hover img {
   opacity: .9;
 }
