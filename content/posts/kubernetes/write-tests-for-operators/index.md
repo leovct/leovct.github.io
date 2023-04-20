@@ -1,6 +1,6 @@
 ---
 author: leovct
-title: Write tests for Kubernetes operators
+title: 🧪 Write tests for Kubernetes operators
 date: 2022-08-01
 description: Learn how to write unit and e2e tests for Kubernetes operators
 tags:
