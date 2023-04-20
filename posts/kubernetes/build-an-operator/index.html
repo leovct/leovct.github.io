@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Build a Kubernetes operator in 10 minutes | leovct.dev</title>
+<meta name="keywords" content="kubernetes, go, infra">
+<meta name="description" content="Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework">
+<meta name="author" content="leovct">
+<link rel="canonical" href="https://leovct.github.io/posts/kubernetes/build-an-operator/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://leovct.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://leovct.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://leovct.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://leovct.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://leovct.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Build a Kubernetes operator in 10 minutes" />
+<meta property="og:description" content="Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://leovct.github.io/posts/kubernetes/build-an-operator/" />
+<meta property="og:image" content="https://leovct.github.io/fig-1-cover.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-07-07T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://leovct.github.io/fig-1-cover.png" />
+<meta name="twitter:title" content="Build a Kubernetes operator in 10 minutes"/>
+<meta name="twitter:description" content="Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://leovct.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Build a Kubernetes operator in 10 minutes",
+      "item": "https://leovct.github.io/posts/kubernetes/build-an-operator/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Build a Kubernetes operator in 10 minutes",
+  "name": "Build a Kubernetes operator in 10 minutes",
+  "description": "Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework",
+  "keywords": [
+    "kubernetes", "go", "infra"
+  ],
+  "articleBody": "You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one? If you want to know more, you’ve come to the right place!\nKubernetes operators is a complicated subject but fortunately, since their creation in 2016, many tools have been developed to simplify the life of engineers.\nWithout further ado, let’s dive in and learn more about operators!\ntl;dr Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it’s highly recommended to use a framework like Kubebuilder or OperatorSDK, as shown in this article.\nWhat is an operator? Wait a minute, do you know what Kubernetes (or k8s) is? Just a quick reminder for everyone, it’s an “open source system to deploy, scale, and manage containerized applications anywhere” developed by Google Cloud.\nMost people use Kubernetes by deploying their applications using native resources such as pods, deployments, services, etc. However, it is possible to extend the capabilities of the software to incorporate its logic to meet specific needs. That’s where the operator comes into place.\nThe main goal of an operator is to translate an engineer’s logic into code in order to automate certain tasks beyond what Kubernetes can do natively.\nEngineers dealing with applications or services have a deep knowledge of how the system should behave, how it should be deployed, and how to react in case of a problem. The ability to encapsulate this technical knowledge in code and automate actions means less time is spent on repetitive tasks and more on important issues.\nFor example, one can imagine an operator deploying and maintaining tools such as MySQL, Elasticsearch, or Gitlab runners in Kubernetes. An operator could configure these tools, adjust the state of the system according to events and react to failures.\nSounds interesting, right? Let’s get our hands dirty.\nPractical Work You could either build an operator from scratch using the controller-runtime project developed by Kubernetes or you could use one of the most popular frameworks to accelerate your development cycle and reduce the complexity (Kubebuilder or OperatorSDK). I’d choose the Kubebuilder framework because it’s very easy to use, the documentation is good, and it’s a battle-tested product. In any case, the two projects are currently being aligned to merge into a single project.\n1. Set up your environment You’ll need some tools to develop your operator. Here are the requisites:\ngo version v1.17.9+ docker version 17.03+ kubectl version v1.11.3+ You’ll also need access to a Kubernetes v1.11.3+ cluster. I highly suggest using kind to set up your own local k8s cluster, it’s very easy to use!\nWe can then install kubebuilder.\n$ curl -L -o kubebuilder \\ kuhttps://go.kubebuilder.io/dl/latest/$(go env GOOS)/$(go env GOARCH) \\ \u0026\u0026 chmod +x kubebuilder \\ \u0026\u0026 mv kubebuilder /usr/local/bin/ If everything goes fine, you should see a similar output (the version might have changed depending on when you read this article).\n$ kubebuilder version Version: main.version{KubeBuilderVersion:\"3.4.1\", KubernetesVendor:\"1.23.5\", GitCommit:\"d59d7882ce95ce5de10238e135ddff31d8ede026\", BuildDate:\"2022-05-06T13:58:56Z\", GoOs:\"darwin\", GoArch:\"amd64\"} Awesome, now we can get started!\n2. Create a simple operator Let’s do a little exercise: we’ll build a simple foo operator which has no real use, except to demonstrate the capabilities of an operator.\nInitialise a new project by running the following command. It will download the controller-runtime binary and scaffold a project that’s ready for us to customise.\n$ kubebuilder init --domain my.domain --repo my.domain/tutorial Writing kustomize manifests for you to edit... Writing scaffold for you to edit... Get controller runtime: $ go get sigs.k8s.io/controller-runtime@v0.11.2 go: downloading sigs.k8s.io/controller-runtime v0.11.2 ... Update dependencies: $ go mod tidy go: downloading github.com/onsi/gomega v1.17.0 ... Here’s the structure of the project (as you can notice, it’s a Go project):\n$ ls -a -rw------- 1 leovct staff 129 Jun 30 16:08 .dockerignore -rw------- 1 leovct staff 367 Jun 30 16:08 .gitignore -rw------- 1 leovct staff 776 Jun 30 16:08 Dockerfile -rw------- 1 leovct staff 5029 Jun 30 16:08 Makefile -rw------- 1 leovct staff 104 Jun 30 16:08 PROJECT -rw------- 1 leovct staff 2718 Jun 30 16:08 README.md drwx------ 6 leovct staff 192 Jun 30 16:08 config -rw------- 1 leovct staff 3218 Jun 30 16:08 go.mod -rw-r--r-- 1 leovct staff 94801 Jun 30 16:08 go.sum drwx------ 3 leovct staff 96 Jun 30 16:08 hack -rw------- 1 leovct staff 2780 Jun 30 16:08 main.go Let’s go through the most important components of the operator:\nmain.go is the entry point of the project; it sets up and runs the manager config/ contains the manifests to deploy the operator in Kubernetes Dockerfile is the container file used to build the manager’s image Wait, what’s this manager component?!\nThis is going to be a bit theoretical. Hang on!\nAn operator is made of two components, a custom resource definition (CRD) and a controller.\nA CRD is a “Kubernetes custom type” or a blueprint of the resource, used to describe its specification and status. We can define instances of the CRD, called custom resources (or CR).\nFig 2. Custom Resource Definition (CRD) and Custom Resources (CR)\nThe controller (also called the control loop) continuously monitors the state of the cluster and, depending on events, makes changes. Its goal is to bring the current state of a resource towards its desired state, defined by the user in the specification of the custom resource.\nFig 3. High-level operation of a controller by Stefanie Lai\nIn general, a controller is specific to a type of resource but it can perform CRUD (Create, Read, Update and Delete) operations on a set of different resources.\nAn example of a controller, presented in the Kubernetes documentation, is the thermostat. When we set the temperature, we tell the thermostat the desired state. The actual state is determined by the actual temperature of the room. The thermostat then reacts to bring the actual state closer to the desired state by turning the heat on or off.\nWhat about the manager then? The goal of this component is to start all the various controllers and makes the set of control loops coexist. Let’s say you have two CRDs in your project. You’ll then have two controllers: one for each CRD. The manager will start these two controllers and make them coexist.\nIf you want more details on how operators work, you can leave questions in the comments or explore the list of resources provided at the end of the article. I will certainly do a detailed article on this concept in the future.\nNow that we know how an operator works, we can start to create one using the Kubebuilder framework. We’ll start by creating a new API (group/version) and a new Kind (CRD). Press yes when asked to create a CRD and a controller.\n$ kubebuilder create api --group tutorial --version v1 --kind Foo Create Resource [y/n] y Create Controller [y/n] y Writing kustomize manifests for you to edit... Writing scaffold for you to edit... api/v1/foo_types.go controllers/foo_controller.go Update dependencies: $ go mod tidy Running make: $ make generate mkdir -p /Users/leovct/Documents/tutorial/bin GOBIN=/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0 /Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile=\"hack/boilerplate.go.txt\" paths=\"./...\" This is where the fun starts now! We’ll customise the CRD and the controller to meet our needs. You’ll notice that two new folders have been created:\napi/v1/ which contains our Foo CRD (see foo_types.go) controllers/ which contain the Foo controller (see foo_controller.go) 3. Customize the CRD and the controller Here’s our lovely Foo CRD customised (see api/v1/foo_types.go). As I said previously, this CRD has no purpose. It simply shows how you can use operators to perform simple tasks in Kubernetes.\nThe Foo CRD has a name field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a pod with the same name as his friend), its happy status will be set to true.\nNow, let’s implement the logic of the controller. Nothing very complicated here. We fetch the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, we list all the pods that have the same name as Foo’s friend. If we find one (or more), we update Foo’s happy status to true, else we set it to false.\nNote that the controller also reacts to Pod events (see mapPodsReqToFooReq). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the Pod is a “friend” of one of the Foo custom resources deployed in the cluster.\nA picture is worth more than 1000 words so here is an overview of how the operator works.\nFig 4. Overview of the operator’s functioning\nAnd now, here is the implementation of the controller.\nWe’re done editing the API definitions and the controller so we can run the following command to update the operator manifests. If you pay attention, you’ll see that some manifest files have been updated.\n$ make manifests /Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths=\"./...\" output:crd:artifacts:config=config/crd/bases 4. Run the controller I’m using a local Kubernetes cluster set up with kind, and I advise you to do the same. It’s very easy to use.\nFirst, we install the CRDs into the cluster.\n$ make install /Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths=\"./...\" output:crd:artifacts:config=config/crd/bases kubectl apply -k config/crd customresourcedefinition.apiextensions.k8s.io/foos.tutorial.my.domain created You can see that the Foo CRD has been created.\n$ kubectl get crds NAME CREATED AT foos.tutorial.my.domain 2022-06-30T17:02:45Z Then we run the controller in the terminal. Keep in mind that we can also deploy it as deployment in the Kubernetes cluster.\n$ make run /Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths=\"./...\" output:crd:artifacts:config=config/crd/bases /Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile=\"hack/boilerplate.go.txt\" paths=\"./...\" go fmt ./... go vet ./... go run ./main.go INFO controller-runtime.metrics Metrics server is starting to listen {\"addr\": \":8080\"} INFO setup starting manager INFO Starting server {\"path\": \"/metrics\", \"kind\": \"metrics\", \"addr\": \"[::]:8080\"} INFO Starting server {\"kind\": \"health probe\", \"addr\": \"[::]:8081\"} INFO controller.foo Starting EventSource {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"source\": \"kind source: *v1.Foo\"} INFO controller.foo Starting EventSource {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"source\": \"kind source:*v1.Pod\"} INFO controller.foo Starting Controller {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\"} INFO controller.foo Starting workers {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"worker count\": 1} As you can see, the manager started and then the Foo controller started. The controller is now running and listening to events!\n5. Test the controller To test that everything works properly, we’ll create two Foo custom resources and some pods just to see how the controller behaves.\nFirst, create the Foo custom resources manifests in config/samples and run the following command to create the resources in your local Kubernetes cluster.\n$ kubectl apply -f config/samples foo.tutorial.my.domain/foo-1 created foo.tutorial.my.domain/foo-2 created You should see that the controller triggered two reconciliation loops for each Foo custom resource creation event. You may wonder why two loops were triggered for each custom resource and not one, this is a more technical topic, I invite you to read this thread.\nINFO controller.foo reconciling foo custom resource {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\"} INFO controller.foo foo's happy status updated {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\", \"status\": \"false\"} INFO controller.foo foo custom resource reconciled {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\"} INFO controller.foo reconciling foo custom resource {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-2\", \"namespace\": \"default\"} INFO controller.foo foo's happy status updated {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-2\", \"namespace\": \"default\", \"status\": \"false\"} INFO controller.foo foo custom resource reconciled {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-2\", \"namespace\": \"default\"} If you check the status of the Foo custom resources, you can see that their status is empty. That’s exactly what we expect so everything’s good so far!\n$ kubectl describe foos Name: foo-1 Namespace: default API Version: tutorial.my.domain/v1 Kind: Foo Metadata: ... Spec: Name: jack Status: Name: foo-2 Namespace: default API Version: tutorial.my.domain/v1 Kind: Foo Metadata: ... Spec: Name: joe Status: Now, let’s spice things up! We’ll deploy a pod named jack to see how the system reacts.\nOnce done, you should see that the controller reacts to the pod creation event. It then updates the status of the first Foo custom resource as expected. You can verify by yourself by describing the Foo custom resources.\nINFO pod linked to a foo custom resource issued an event {\"name\": \"jack\"} INFO controller.foo reconciling foo custom resource {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\"} INFO controller.foo pod linked to a foo custom resource found {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\", \"name\": \"jack\"} INFO controller.foo foo's happy status updated {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\", \"status\": true} INFO controller.foo foo custom resource reconciled {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-1\", \"namespace\": \"default\"} Let’s update the specification of the second Foo custom resource and change the value of its name field from joe to jack. The controller should catch the update event and trigger a reconciliation loop.\nINFO controller.foo pod linked to a foo custom resource found {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-2\", \"namespace\": \"default\", \"name\": \"jack\"} INFO controller.foo foo's happy status updated {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-2\", \"namespace\": \"default\", \"status\": true} INFO controller.foo foo custom resource reconciled {\"reconciler group\": \"tutorial.my.domain\", \"reconciler kind\": \"Foo\", \"name\": \"foo-2\", \"namespace\": \"default\"} Yeah, it worked! Enough tests for today; I think you got it! If you delete the pod named jack, the custom resources’ happy status will be set back to false.\nWe can confirm that the operator works as expected! It would be better to write unit and e2e tests but that’s not the purpose of this article, i’ll cover this topic in another article.\nYou can be proud of yourself. You have designed, deployed, and tested your very first operator! Congratulations!!\nHere’s the link to the GitHub repository if you need to browse the code.\nTo go further We’ve seen how to create a very basic Kubernetes operator and it’s far from being perfect. There are many ways to improve it. Here’s a list of topics you can explore if you want.\nOptimise event filtering (sometimes, events are submitted twice…) Refine RBAC permissions Improve the logging system Issue Kubernetes events when resources are updated by the operator Add custom fields when getting Foo custom resources (display the happy status maybe?) Write unit tests and e2e tests Here’s a list of resources you can use to dig deeper into the subject.\nhttps://youtu.be/i9V4oCa5f9I https://book.kubebuilder.io/ https://cloudark.medium.com/kubernetes-custom-controllers-b6c7d0668fdf https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1 https://medium.com/swlh/advanced-kubernetes-operators-development-988edad5f58a https://operatorhub.io/ Have fun! :)\nNB: A first version of this article was published on Medium in Better Programming, you can find it here. This article is an improved version with a little more content, including the diagram of the Foo operator’s functioning.\n",
+  "wordCount" : "2470",
+  "inLanguage": "en",
+  "image":"https://leovct.github.io/fig-1-cover.png","datePublished": "2022-07-07T00:00:00Z",
+  "dateModified": "2022-07-07T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "leovct"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://leovct.github.io/posts/kubernetes/build-an-operator/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "leovct.dev",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://leovct.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://leovct.github.io/" accesskey="h" title="leovct.dev (Alt + H)">leovct.dev</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://leovct.github.io/search/" title="search (Alt &#43; /)" accesskey=/>
+                    <span>search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://leovct.github.io/tags/" title="tags">
+                    <span>tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://leovct.github.io/archives/" title="archives">
+                    <span>archives</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Build a Kubernetes operator in 10 minutes
+    </h1>
+    <div class="post-description">
+      Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework
+    </div>
+    <div class="post-meta"><span title='2022-07-07 00:00:00 +0000 UTC'>July 7, 2022</span>&nbsp;·&nbsp;12 min&nbsp;·&nbsp;2470 words&nbsp;·&nbsp;leovct&nbsp;|&nbsp;<a href="https://github.com/leovct/leovct.github.io/tree/main/content//posts/kubernetes/build-an-operator/index.md" rel="noopener noreferrer" target="_blank">📝 Suggest changes</a>
+
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="lazy" srcset="https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hue3fb2afbabe36e32351792ab12906dbf_834479_360x0_resize_box_3.png 360w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hue3fb2afbabe36e32351792ab12906dbf_834479_480x0_resize_box_3.png 480w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hue3fb2afbabe36e32351792ab12906dbf_834479_720x0_resize_box_3.png 720w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hue3fb2afbabe36e32351792ab12906dbf_834479_1080x0_resize_box_3.png 1080w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hue3fb2afbabe36e32351792ab12906dbf_834479_1500x0_resize_box_3.png 1500w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png 1920w" 
+            sizes="(min-width: 768px) 720px, 100vw" src="https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png" alt="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)" 
+            width="1920" height="1282">
+        <p>Fig 1. Photo from <a href="https://unsplash.com/photos/Esq0ovRY-Zs">Unsplash</a></p>
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#what-is-an-operator" aria-label="What is an operator?">What is an operator?</a></li>
+                <li>
+                    <a href="#practical-work" aria-label="Practical Work">Practical Work</a><ul>
+                        
+                <li>
+                    <a href="#1-set-up-your-environment" aria-label="1. Set up your environment">1. Set up your environment</a></li>
+                <li>
+                    <a href="#2-create-a-simple-operator" aria-label="2. Create a simple operator">2. Create a simple operator</a></li>
+                <li>
+                    <a href="#3-customize-the-crd-and-the-controller" aria-label="3. Customize the CRD and the controller">3. Customize the CRD and the controller</a></li>
+                <li>
+                    <a href="#4-run-the-controller" aria-label="4. Run the controller">4. Run the controller</a></li>
+                <li>
+                    <a href="#5-test-the-controller" aria-label="5. Test the controller">5. Test the controller</a></li></ul>
+                </li>
+                <li>
+                    <a href="#to-go-further" aria-label="To go further">To go further</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
+If you want to know more, you&rsquo;ve come to the right place!</p>
+<p>Kubernetes operators is a complicated subject but fortunately, since <a href="https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html">their creation</a> in 2016, many tools have been developed to simplify the life of engineers.</p>
+<p>Without further ado, let’s dive in and learn more about operators!</p>
+<blockquote>
+<p><strong>tl;dr</strong> Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it&rsquo;s highly recommended to use a framework like <a href="https://book.kubebuilder.io/">Kubebuilder</a> or <a href="https://sdk.operatorframework.io/">OperatorSDK</a>, as shown in this article.</p>
+</blockquote>
+<h2 id="what-is-an-operator">What is an operator?<a hidden class="anchor" aria-hidden="true" href="#what-is-an-operator">#</a></h2>
+<p>Wait a minute, do you know what <a href="https://kubernetes.io/">Kubernetes</a> (or k8s) is? Just a quick reminder for everyone, it’s an “open source system to deploy, scale, and manage containerized applications anywhere” developed by <a href="https://cloud.google.com/learn/what-is-kubernetes">Google Cloud</a>.</p>
+<p>Most people use Kubernetes by deploying their applications using native resources such as pods, deployments, services, etc. However, it is possible to extend the capabilities of the software to incorporate its logic to meet specific needs. That’s where the operator comes into place.</p>
+<blockquote>
+<p>The main goal of an operator is to translate an engineer’s logic into code in order to automate certain tasks beyond what Kubernetes can do natively.</p>
+</blockquote>
+<p>Engineers dealing with applications or services have a deep knowledge of how the system should behave, how it should be deployed, and how to react in case of a problem. The ability to encapsulate this technical knowledge in code and automate actions means less time is spent on repetitive tasks and more on important issues.</p>
+<p>For example, one can imagine an operator deploying and maintaining tools such as <a href="https://www.mysql.com/">MySQL</a>, <a href="https://www.elastic.co/">Elasticsearch</a>, or <a href="https://docs.gitlab.com/runner/">Gitlab runners</a> in Kubernetes. An operator could configure these tools, adjust the state of the system according to events and react to failures.</p>
+<p>Sounds interesting, right? Let’s get our hands dirty.</p>
+<h2 id="practical-work">Practical Work<a hidden class="anchor" aria-hidden="true" href="#practical-work">#</a></h2>
+<p>You could either build an operator from scratch using the <a href="https://github.com/kubernetes-sigs/controller-runtime">controller-runtime</a> project developed by Kubernetes or you could use one of the most popular frameworks to accelerate your development cycle and reduce the complexity (<a href="https://book.kubebuilder.io/">Kubebuilder</a> or <a href="https://sdk.operatorframework.io/">OperatorSDK</a>). I’d choose the Kubebuilder framework because it’s very easy to use, the documentation is good, and it’s a battle-tested product. In any case, the two projects are currently being aligned to merge into a single project.</p>
+<h3 id="1-set-up-your-environment">1. Set up your environment<a hidden class="anchor" aria-hidden="true" href="#1-set-up-your-environment">#</a></h3>
+<p>You’ll need some tools to develop your operator. Here are the requisites:</p>
+<ul>
+<li><a href="https://go.dev/doc/install">go</a> version v1.17.9+</li>
+<li><a href="https://docs.docker.com/get-docker/">docker</a> version 17.03+</li>
+<li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/">kubectl</a> version v1.11.3+</li>
+</ul>
+<p>You&rsquo;ll also need access to a Kubernetes v1.11.3+ cluster. I highly suggest using <a href="https://kind.sigs.k8s.io/">kind</a> to set up your own local k8s cluster, it’s very easy to use!</p>
+<p>We can then install kubebuilder.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ curl -L -o kubebuilder <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    kuhttps://go.kubebuilder.io/dl/latest/<span style="color:#66d9ef">$(</span>go env GOOS<span style="color:#66d9ef">)</span>/<span style="color:#66d9ef">$(</span>go env GOARCH<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> chmod +x kubebuilder <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> mv kubebuilder /usr/local/bin/
+</span></span></code></pre></div><p>If everything goes fine, you should see a similar output (the version might have changed depending on when you read this article).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubebuilder version
+</span></span><span style="display:flex;"><span>Version: main.version<span style="color:#f92672">{</span>KubeBuilderVersion:<span style="color:#e6db74">&#34;3.4.1&#34;</span>, KubernetesVendor:<span style="color:#e6db74">&#34;1.23.5&#34;</span>, GitCommit:<span style="color:#e6db74">&#34;d59d7882ce95ce5de10238e135ddff31d8ede026&#34;</span>, BuildDate:<span style="color:#e6db74">&#34;2022-05-06T13:58:56Z&#34;</span>, GoOs:<span style="color:#e6db74">&#34;darwin&#34;</span>, GoArch:<span style="color:#e6db74">&#34;amd64&#34;</span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>Awesome, now we can get started!</p>
+<h3 id="2-create-a-simple-operator">2. Create a simple operator<a hidden class="anchor" aria-hidden="true" href="#2-create-a-simple-operator">#</a></h3>
+<p>Let’s do a little exercise: we’ll build a simple foo operator which has no real use, except to demonstrate the capabilities of an operator.</p>
+<p>Initialise a new project by running the following command. It will download the controller-runtime binary and scaffold a project that’s ready for us to customise.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubebuilder init --domain my.domain --repo my.domain/tutorial
+</span></span><span style="display:flex;"><span>Writing kustomize manifests <span style="color:#66d9ef">for</span> you to edit...
+</span></span><span style="display:flex;"><span>Writing scaffold <span style="color:#66d9ef">for</span> you to edit...
+</span></span><span style="display:flex;"><span>Get controller runtime:
+</span></span><span style="display:flex;"><span>$ go get sigs.k8s.io/controller-runtime@v0.11.2
+</span></span><span style="display:flex;"><span>go: downloading sigs.k8s.io/controller-runtime v0.11.2
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>Update dependencies:
+</span></span><span style="display:flex;"><span>$ go mod tidy
+</span></span><span style="display:flex;"><span>go: downloading github.com/onsi/gomega v1.17.0
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Here’s the structure of the project (as you can notice, it’s a Go project):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ls -a
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff    <span style="color:#ae81ff">129</span> Jun <span style="color:#ae81ff">30</span> 16:08 .dockerignore
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff    <span style="color:#ae81ff">367</span> Jun <span style="color:#ae81ff">30</span> 16:08 .gitignore
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff    <span style="color:#ae81ff">776</span> Jun <span style="color:#ae81ff">30</span> 16:08 Dockerfile
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff   <span style="color:#ae81ff">5029</span> Jun <span style="color:#ae81ff">30</span> 16:08 Makefile
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff    <span style="color:#ae81ff">104</span> Jun <span style="color:#ae81ff">30</span> 16:08 PROJECT
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff   <span style="color:#ae81ff">2718</span> Jun <span style="color:#ae81ff">30</span> 16:08 README.md
+</span></span><span style="display:flex;"><span>drwx------   <span style="color:#ae81ff">6</span> leovct  staff    <span style="color:#ae81ff">192</span> Jun <span style="color:#ae81ff">30</span> 16:08 config
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff   <span style="color:#ae81ff">3218</span> Jun <span style="color:#ae81ff">30</span> 16:08 go.mod
+</span></span><span style="display:flex;"><span>-rw-r--r--   <span style="color:#ae81ff">1</span> leovct  staff  <span style="color:#ae81ff">94801</span> Jun <span style="color:#ae81ff">30</span> 16:08 go.sum
+</span></span><span style="display:flex;"><span>drwx------   <span style="color:#ae81ff">3</span> leovct  staff     <span style="color:#ae81ff">96</span> Jun <span style="color:#ae81ff">30</span> 16:08 hack
+</span></span><span style="display:flex;"><span>-rw-------   <span style="color:#ae81ff">1</span> leovct  staff   <span style="color:#ae81ff">2780</span> Jun <span style="color:#ae81ff">30</span> 16:08 main.go
+</span></span></code></pre></div><p>Let’s go through the most important components of the operator:</p>
+<ul>
+<li><code>main.go</code> is the entry point of the project; it sets up and runs the manager</li>
+<li><code>config/</code> contains the manifests to deploy the operator in Kubernetes</li>
+<li><code>Dockerfile</code> is the container file used to build the manager’s image</li>
+</ul>
+<p><strong>Wait, what’s this manager component?!</strong></p>
+<p>This is going to be a bit theoretical. Hang on!</p>
+<blockquote>
+<p>An operator is made of two components, a custom resource definition (CRD) and a controller.</p>
+</blockquote>
+<p>A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to describe its specification and status. We can define instances of the CRD, called custom resources (or CR).</p>
+<figure class="align-center ">
+    <img loading="lazy" src="fig-2-crd-cr.png#center"
+         alt="Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)" width="400" height="150"/> <figcaption>
+            <p>Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)</p>
+        </figcaption>
+</figure>
+
+<p>The controller (also called the control loop) continuously monitors the state of the cluster and, depending on events, makes changes. Its goal is to bring the current state of a resource towards its desired state, defined by the user in the specification of the custom resource.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="fig-3-controller.png#center"
+         alt="Fig 3. High-level operation of a controller by Stefanie Lai" width="620" height="120"/> <figcaption>
+            <p>Fig 3. High-level operation of a controller by <a href="https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1">Stefanie Lai</a></p>
+        </figcaption>
+</figure>
+
+<p>In general, a controller is specific to a type of resource but it can perform CRUD (Create, Read, Update and Delete) operations on a set of different resources.</p>
+<p>An example of a controller, presented in the Kubernetes documentation, is the thermostat. When we set the temperature, we tell the thermostat the desired state. The actual state is determined by the actual temperature of the room. The thermostat then reacts to bring the actual state closer to the desired state by turning the heat on or off.</p>
+<p>What about the manager then? The goal of this component is to start all the various controllers and makes the set of control loops coexist. Let’s say you have two CRDs in your project. You’ll then have two controllers: one for each CRD. The manager will start these two controllers and make them coexist.</p>
+<p><em>If you want more details on how operators work, you can leave questions in the comments or explore the list of resources provided at the end of the article. I will certainly do a detailed article on this concept in the future</em>.</p>
+<p>Now that we know how an operator works, we can start to create one using the Kubebuilder framework. We’ll start by creating a new API (group/version) and a new Kind (CRD). Press yes when asked to create a CRD and a controller.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubebuilder create api --group tutorial --version v1 --kind Foo
+</span></span><span style="display:flex;"><span>Create Resource <span style="color:#f92672">[</span>y/n<span style="color:#f92672">]</span> y
+</span></span><span style="display:flex;"><span>Create Controller <span style="color:#f92672">[</span>y/n<span style="color:#f92672">]</span> y
+</span></span><span style="display:flex;"><span>Writing kustomize manifests <span style="color:#66d9ef">for</span> you to edit...
+</span></span><span style="display:flex;"><span>Writing scaffold <span style="color:#66d9ef">for</span> you to edit...
+</span></span><span style="display:flex;"><span>api/v1/foo_types.go
+</span></span><span style="display:flex;"><span>controllers/foo_controller.go
+</span></span><span style="display:flex;"><span>Update dependencies:
+</span></span><span style="display:flex;"><span>$ go mod tidy
+</span></span><span style="display:flex;"><span>Running make:
+</span></span><span style="display:flex;"><span>$ make generate
+</span></span><span style="display:flex;"><span>mkdir -p /Users/leovct/Documents/tutorial/bin
+</span></span><span style="display:flex;"><span>GOBIN<span style="color:#f92672">=</span>/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hack/boilerplate.go.txt&#34;</span> paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span>
+</span></span></code></pre></div><p>This is where the fun starts now! We’ll customise the CRD and the controller to meet our needs. You’ll notice that two new folders have been created:</p>
+<ul>
+<li><code>api/v1/</code> which contains our Foo CRD (see <code>foo_types.go</code>)</li>
+<li><code>controllers/</code> which contain the Foo controller (see <code>foo_controller.go</code>)</li>
+</ul>
+<h3 id="3-customize-the-crd-and-the-controller">3. Customize the CRD and the controller<a hidden class="anchor" aria-hidden="true" href="#3-customize-the-crd-and-the-controller">#</a></h3>
+<p>Here’s our lovely Foo CRD customised (see <code>api/v1/foo_types.go</code>). As I said previously, this CRD has no purpose. It simply shows how you can use operators to perform simple tasks in Kubernetes.</p>
+<p>The Foo CRD has a <code>name</code> field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a pod with the same name as his friend), its <code>happy</code> status will be set to <code>true</code>.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/aa3b494eafdc9bdbc2dc705936d9a451.js"></script>
+
+<p>Now, let’s implement the logic of the controller. Nothing very complicated here. We fetch the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, we list all the pods that have the same name as Foo’s friend. If we find one (or more), we update Foo’s <code>happy</code> status to <code>true</code>, else we set it to <code>false</code>.</p>
+<p>Note that the controller also reacts to Pod events (see mapPodsReqToFooReq). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the Pod is a “friend” of one of the Foo custom resources deployed in the cluster.</p>
+<p>A picture is worth more than 1000 words so here is an overview of how the operator works.</p>
+<figure class="align-center ">
+    <img loading="lazy" src="fig-4-foo-operator-overview.png#center"
+         alt="Fig 4. Overview of the operator&amp;rsquo;s functioning" width="600" height="300"/> <figcaption>
+            <p>Fig 4. Overview of the operator&rsquo;s functioning</p>
+        </figcaption>
+</figure>
+
+<p>And now, here is the implementation of the controller.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/24b53d11662fa7b8d14721edc3f58b0d.js"></script>
+
+<p>We’re done editing the API definitions and the controller so we can run the following command to update the operator manifests. If you pay attention, you’ll see that some manifest files have been updated.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make manifests
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName<span style="color:#f92672">=</span>manager-role crd webhook paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#f92672">=</span>config/crd/bases
+</span></span></code></pre></div><h3 id="4-run-the-controller">4. Run the controller<a hidden class="anchor" aria-hidden="true" href="#4-run-the-controller">#</a></h3>
+<p>I’m using a local Kubernetes cluster set up with kind, and I advise you to do the same. It’s very easy to use.</p>
+<p>First, we install the CRDs into the cluster.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make install
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName<span style="color:#f92672">=</span>manager-role crd webhook paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#f92672">=</span>config/crd/bases
+</span></span><span style="display:flex;"><span>kubectl apply -k config/crd
+</span></span><span style="display:flex;"><span>customresourcedefinition.apiextensions.k8s.io/foos.tutorial.my.domain created
+</span></span></code></pre></div><p>You can see that the Foo CRD has been created.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubectl get crds
+</span></span><span style="display:flex;"><span>NAME                               CREATED AT
+</span></span><span style="display:flex;"><span>foos.tutorial.my.domain            2022-06-30T17:02:45Z
+</span></span></code></pre></div><p>Then we run the controller in the terminal. Keep in mind that we can also deploy it as deployment in the Kubernetes cluster.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make run
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName<span style="color:#f92672">=</span>manager-role crd webhook paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#f92672">=</span>config/crd/bases
+</span></span><span style="display:flex;"><span>/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hack/boilerplate.go.txt&#34;</span> paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span>
+</span></span><span style="display:flex;"><span>go fmt ./...
+</span></span><span style="display:flex;"><span>go vet ./...
+</span></span><span style="display:flex;"><span>go run ./main.go
+</span></span><span style="display:flex;"><span>INFO controller-runtime.metrics Metrics server is starting to listen <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;:8080&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO setup starting manager
+</span></span><span style="display:flex;"><span>INFO Starting server <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;/metrics&#34;</span>, <span style="color:#e6db74">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;metrics&#34;</span>, <span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;[::]:8080&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO Starting server <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;kind&#34;</span>: <span style="color:#e6db74">&#34;health probe&#34;</span>, <span style="color:#e6db74">&#34;addr&#34;</span>: <span style="color:#e6db74">&#34;[::]:8081&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo Starting EventSource <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;source&#34;</span>: <span style="color:#e6db74">&#34;kind source: *v1.Foo&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo Starting EventSource <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;source&#34;</span>: <span style="color:#e6db74">&#34;kind source:*v1.Pod&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo Starting Controller <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo Starting workers <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;worker count&#34;</span>: 1<span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>As you can see, the manager started and then the Foo controller started. The controller is now running and listening to events!</p>
+<h3 id="5-test-the-controller">5. Test the controller<a hidden class="anchor" aria-hidden="true" href="#5-test-the-controller">#</a></h3>
+<p>To test that everything works properly, we’ll create two Foo custom resources and some pods just to see how the controller behaves.</p>
+<p>First, create the Foo custom resources manifests in config/samples and run the following command to create the resources in your local Kubernetes cluster.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/c41cb1ded81ac74486dd01e776545daf.js"></script>
+
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubectl apply -f config/samples
+</span></span><span style="display:flex;"><span>foo.tutorial.my.domain/foo-1 created
+</span></span><span style="display:flex;"><span>foo.tutorial.my.domain/foo-2 created
+</span></span></code></pre></div><p>You should see that the controller triggered two reconciliation loops for each Foo custom resource creation event. You may wonder why two loops were triggered for each custom resource and not one, this is a more technical topic, I invite you to read this <a href="https://github.com/leovct/kubernetes-operator-tutorial/issues/2">thread</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>INFO controller.foo reconciling foo custom resource <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-1&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo foo<span style="color:#e6db74">&#39;s happy status updated {&#34;reconciler group&#34;: &#34;tutorial.my.domain&#34;, &#34;reconciler kind&#34;: &#34;Foo&#34;, &#34;name&#34;: &#34;foo-1&#34;, &#34;namespace&#34;: &#34;default&#34;, &#34;status&#34;: &#34;false&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">INFO controller.foo foo custom resource reconciled {&#34;reconciler group&#34;: &#34;tutorial.my.domain&#34;, &#34;reconciler kind&#34;: &#34;Foo&#34;, &#34;name&#34;: &#34;foo-1&#34;, &#34;namespace&#34;: &#34;default&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">INFO controller.foo reconciling foo custom resource {&#34;reconciler group&#34;: &#34;tutorial.my.domain&#34;, &#34;reconciler kind&#34;: &#34;Foo&#34;, &#34;name&#34;: &#34;foo-2&#34;, &#34;namespace&#34;: &#34;default&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">INFO controller.foo foo&#39;</span>s happy status updated <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-2&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;false&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo foo custom resource reconciled <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-2&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>If you check the status of the Foo custom resources, you can see that their status is empty. That’s exactly what we expect so everything’s good so far!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubectl describe foos
+</span></span><span style="display:flex;"><span>Name:         foo-1
+</span></span><span style="display:flex;"><span>Namespace:    default
+</span></span><span style="display:flex;"><span>API Version:  tutorial.my.domain/v1
+</span></span><span style="display:flex;"><span>Kind:         Foo
+</span></span><span style="display:flex;"><span>Metadata:     ...
+</span></span><span style="display:flex;"><span>Spec:
+</span></span><span style="display:flex;"><span>  Name:       jack
+</span></span><span style="display:flex;"><span>Status:
+</span></span><span style="display:flex;"><span>Name:         foo-2
+</span></span><span style="display:flex;"><span>Namespace:    default
+</span></span><span style="display:flex;"><span>API Version:  tutorial.my.domain/v1
+</span></span><span style="display:flex;"><span>Kind:         Foo
+</span></span><span style="display:flex;"><span>Metadata:     ...
+</span></span><span style="display:flex;"><span>Spec:
+</span></span><span style="display:flex;"><span>  Name:       joe
+</span></span><span style="display:flex;"><span>Status:
+</span></span></code></pre></div><p>Now, let’s spice things up! We’ll deploy a pod named <code>jack</code> to see how the system reacts.</p>
+<script type="application/javascript" src="https://gist.github.com/leovct/fa9cc578ada581f0c32cff14515cc2e2.js"></script>
+
+<p>Once done, you should see that the controller reacts to the pod creation event. It then updates the status of the first Foo custom resource as expected. You can verify by yourself by describing the Foo custom resources.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>INFO pod linked to a foo custom resource issued an event <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;jack&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo reconciling foo custom resource <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-1&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo pod linked to a foo custom resource found <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-1&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;jack&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo foo<span style="color:#960050;background-color:#1e0010">&#39;</span>s happy status updated <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-1&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;status&#34;</span>: true<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo foo custom resource reconciled <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-1&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>Let’s update the specification of the second Foo custom resource and change the value of its name field from <code>joe</code> to <code>jack</code>. The controller should catch the update event and trigger a reconciliation loop.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>INFO controller.foo pod linked to a foo custom resource found <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-2&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;jack&#34;</span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo foo<span style="color:#960050;background-color:#1e0010">&#39;</span>s happy status updated <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-2&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#e6db74">&#34;status&#34;</span>: true<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>INFO controller.foo foo custom resource reconciled <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;reconciler group&#34;</span>: <span style="color:#e6db74">&#34;tutorial.my.domain&#34;</span>, <span style="color:#e6db74">&#34;reconciler kind&#34;</span>: <span style="color:#e6db74">&#34;Foo&#34;</span>, <span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;foo-2&#34;</span>, <span style="color:#e6db74">&#34;namespace&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>Yeah, it worked! Enough tests for today; I think you got it! If you delete the pod named <code>jack</code>, the custom resources’ <code>happy</code> status will be set back to <code>false</code>.</p>
+<p>We can confirm that the operator works as expected! It would be better to write unit and e2e tests but that’s not the purpose of this article, i’ll cover this topic in another article.</p>
+<p>You can be proud of yourself. You have designed, deployed, and tested your very first operator! Congratulations!!</p>
+<p>Here’s the link to the <a href="https://github.com/leovct/kubernetes-operator-tutorial">GitHub repository</a> if you need to browse the code.</p>
+<h2 id="to-go-further">To go further<a hidden class="anchor" aria-hidden="true" href="#to-go-further">#</a></h2>
+<p>We’ve seen how to create a very basic Kubernetes operator and it’s far from being perfect. There are many ways to improve it. Here’s a list of topics you can explore if you want.</p>
+<ul>
+<li>Optimise event filtering (sometimes, events are submitted twice…)</li>
+<li>Refine RBAC permissions</li>
+<li>Improve the logging system</li>
+<li>Issue Kubernetes events when resources are updated by the operator</li>
+<li>Add custom fields when getting Foo custom resources (display the <code>happy</code> status maybe?)</li>
+<li>Write unit tests and e2e tests</li>
+</ul>
+<p>Here’s a list of resources you can use to dig deeper into the subject.</p>
+<ul>
+<li><a href="https://youtu.be/i9V4oCa5f9I">https://youtu.be/i9V4oCa5f9I</a></li>
+<li><a href="https://book.kubebuilder.io/">https://book.kubebuilder.io/</a></li>
+<li><a href="https://cloudark.medium.com/kubernetes-custom-controllers-b6c7d0668fdf">https://cloudark.medium.com/kubernetes-custom-controllers-b6c7d0668fdf</a></li>
+<li><a href="https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1">https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1</a></li>
+<li><a href="https://medium.com/swlh/advanced-kubernetes-operators-development-988edad5f58a">https://medium.com/swlh/advanced-kubernetes-operators-development-988edad5f58a</a></li>
+<li><a href="https://operatorhub.io/">https://operatorhub.io/</a></li>
+</ul>
+<p>Have fun! :)</p>
+<p><em>NB: A first version of this article was published on Medium in <a href="https://betterprogramming.pub/">Better Programming</a>, you can find it <a href="https://betterprogramming.pub/build-a-kubernetes-operator-in-10-minutes-11eec1492d30">here</a>. This article is an improved version with a little more content, including the diagram of the Foo operator&rsquo;s functioning</em>.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://leovct.github.io/tags/kubernetes/">kubernetes</a></li>
+      <li><a href="https://leovct.github.io/tags/go/">go</a></li>
+      <li><a href="https://leovct.github.io/tags/infra/">infra</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://leovct.github.io/">leovct.dev</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

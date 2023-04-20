@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on leovct.dev</title>
     <link>https://leovct.github.io/posts/</link>
     <description>Recent content in Posts on leovct.dev</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
     <lastBuildDate>Mon, 01 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://leovct.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Write tests for Kubernetes operators</title>
-      <link>https://leovct.github.io/posts/write-tests-for-kubernetes-operators/</link>
+      <link>https://leovct.github.io/posts/kubernetes/write-tests-for-operators/</link>
       <pubDate>Mon, 01 Aug 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://leovct.github.io/posts/write-tests-for-kubernetes-operators/</guid>
-      <description>&lt;p&gt;You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s write some tests to use our operator in production!&lt;/p&gt;</description>
+      <guid>https://leovct.github.io/posts/kubernetes/write-tests-for-operators/</guid>
+      <description>Learn how to write unit and e2e tests for Kubernetes operators</description>
     </item>
     
     <item>
       <title>Build a Kubernetes operator in 10 minutes</title>
-      <link>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</link>
+      <link>https://leovct.github.io/posts/kubernetes/build-an-operator/</link>
       <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/</guid>
-      <description>&lt;p&gt;You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
-If you want to know more, you&amp;rsquo;ve come to the right place!&lt;/p&gt;</description>
+      <guid>https://leovct.github.io/posts/kubernetes/build-an-operator/</guid>
+      <description>Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework</description>
     </item>
     
   </channel>
