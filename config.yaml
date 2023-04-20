@@ -2,6 +2,7 @@ baseURL: https://leovct.github.io/
 title: leovct.dev
 theme: PaperMod
 paginate: 5
+googleAnalytics: G-7BWGX7L5F0
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
