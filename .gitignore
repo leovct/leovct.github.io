@@ -5,3 +5,6 @@ resources/
 
 # node
 node_modules/
+
+# other
+.DS_STORE
