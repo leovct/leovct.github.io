@@ -1,6 +1,6 @@
 ---
 author: leovct
-title: Build a Kubernetes operator in 10 minutes
+title: 🛠️ Build a Kubernetes operator in 10 minutes
 description: Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework
 date: 2022-07-07
 tags:
