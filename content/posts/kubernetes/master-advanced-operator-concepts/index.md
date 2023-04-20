@@ -1,6 +1,6 @@
 ---
 author: leovct
-title: Master advanced Kubernetes operator concepts
+title: 🌟 Master advanced Kubernetes operator concepts
 description: Learn how to design production-ready Kubernetes operators
 date: 2023-04-20
 tags:
