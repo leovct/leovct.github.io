@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Mon, 01 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://leovct.github.io/tags/infra/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Write tests for Kubernetes operators</title>
+      <title>🧪 Write tests for Kubernetes operators</title>
       <link>https://leovct.github.io/posts/kubernetes/write-tests-for-operators/</link>
       <pubDate>Mon, 01 Aug 2022 00:00:00 +0000</pubDate>
       
@@ -16,7 +16,7 @@
     </item>
     
     <item>
-      <title>Build a Kubernetes operator in 10 minutes</title>
+      <title>🛠️ Build a Kubernetes operator in 10 minutes</title>
       <link>https://leovct.github.io/posts/kubernetes/build-an-operator/</link>
       <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
       
