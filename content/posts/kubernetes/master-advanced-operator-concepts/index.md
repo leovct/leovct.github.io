@@ -1,45 +1,33 @@
-+++
-author = "leovct"
-title = "Master advanced Kubernetes operator concepts"
-date = "2022-08-01"
-description = "Learn how to write unit and e2e tests for Kubernetes operators"
-tags = [
-    "kubernetes",
-    "go",
-]
-categories = [
-    "themes",
-    "syntax",
-]
-series = ["Themes Guide"]
-aliases = ["migrate-from-jekyl"]
-+++
+---
+author: leovct
+title: Master advanced Kubernetes operator concepts
+description: Learn how to design production-ready Kubernetes operators
+date: 2023-04-20
+tags:
+  - kubernetes
+  - go
+cover:
+  image: fig-1-cover.png
+  caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/FPKnAO-CF6M)
+---
 
 You've probably built some Kubernetes operators in the past and you want to write production-ready operators? Then you're at the right place.
-<!--more-->
-
-{{< figure
-  src="fig-1-photo.png"
-  caption="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/FPKnAO-CF6M)"
-  height="350"
-  width="600"
->}}
 
 And maybe you haven't, no problem! I've got what you need to explore the fascinating world of Kubernetes operators. You'll first learn how to build a simple operator using the Kubebuilder framework and then how to write robuts tests to ensure its proper functioning. Let's dive in!
 
 ## Advanced CRD concepts
 
-### 1. Validate CRD input using webhooks
+### 1. Validate CRD input using webhooks
 
 https://medium.com/r/?url=https%3A%2F%2Fbook.kubebuilder.io%2Freference%2Fgenerating-crd.html%23validation
 
 https://medium.com/swlh/advanced-kubernetes-operators-development-988edad5f58a
 
-### 2. Add additional printer columns
+### 2. Add additional printer columns
 
 https://medium.com/r/?url=https%3A%2F%2Fbook.kubebuilder.io%2Freference%2Fgenerating-crd.html%23additional-printer-columns
 
-### 3. Keep unkown fields
+### 3. Keep unkown fields
 
 Stop the api server from pruning fields that are not specified
 // +kubebuilder:pruning:PreserveUnknownFields
@@ -56,7 +44,7 @@ https://medium.com/r/?url=https%3A%2F%2Fbook.kubebuilder.io%2Freference%2Fwatchi
 
 TODO: check ownerRef field
 
-### 3. Emit logs And events
+### 3. Emit logs And events
 
 TODO: condition status, liveness and readiness probes.
 https://medium.com/r/?url=https%3A%2F%2Fbook.kubebuilder.io%2Freference%2Fgenerating-crd.html%23status
