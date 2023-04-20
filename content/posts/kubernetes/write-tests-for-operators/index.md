@@ -1,31 +1,20 @@
-+++
-author = "leovct"
-title = "Write tests for Kubernetes operators"
-date = "2022-08-01"
-description = "Learn how to write unit and e2e tests for Kubernetes operators"
-tags = [
-    "kubernetes",
-    "go",
-]
-categories = [
-    "themes",
-    "syntax",
-]
-series = ["Themes Guide"]
-aliases = ["migrate-from-jekyl"]
-+++
+---
+author: leovct
+title: Write tests for Kubernetes operators
+date: 2022-08-01
+description: Learn how to write unit and e2e tests for Kubernetes operators
+tags:
+  - kubernetes
+  - go
+  - infra
+cover:
+  image: fig-1-cover.png
+  caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)
+---
 
 You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!
 
 Let's write some tests to use our operator in production!
-<!--more-->
-
-{{< figure
-  src="fig-1-photo.png"
-  caption="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)"
-  height="350"
-  width="600"
->}}
 
 In my previous [article](https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/), I showed how to build a Kubernetes operator in about ten minutes - but you must be quick haha! I’ve also described the functioning of an operator, the custom resource definition and custom resources, the controllers, and the manager. If you want to learn more about these concepts, I highly recommend you read the article.
 
@@ -87,6 +76,7 @@ Because a diagram explains ideas way better than three paragraphs, here it is.
   caption="Fig 2. Overview of the operator's functioning"
   height="300"
   width="600"
+  align="center"
 >}}
 
 First, there is the Foo Custom Resource Definition or CRD (see `api/v1/foo_types.go`). It has a `name` field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a Pod with the same name as his friend), its `happy` status will be set to `true`. A small addition since the previous tutorial, the status of Foo also contains a `color` field, determined according to its name and the namespace in which it evolves.

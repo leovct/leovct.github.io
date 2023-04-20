@@ -1,34 +1,23 @@
-+++
-author = "leovct"
-title = "Build a Kubernetes operator in 10 minutes"
-date = "2022-07-07"
-description = "Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework"
-tags = [
-    "kubernetes",
-    "go",
-]
-categories = [
-    "themes",
-    "syntax",
-]
-series = ["Themes Guide"]
-aliases = ["migrate-from-jekyl"]
-+++
+---
+author: leovct
+title: Build a Kubernetes operator in 10 minutes
+description: Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework
+date: 2022-07-07
+tags:
+  - kubernetes
+  - go
+  - infra
+cover:
+  image: fig-1-cover.png
+  caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)
+---
 
 You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
 If you want to know more, you've come to the right place!
-<!--more-->
 
 Kubernetes operators is a complicated subject but fortunately, since [their creation](https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html) in 2016, many tools have been developed to simplify the life of engineers.
 
 Without further ado, let’s dive in and learn more about operators!
-
-{{< figure
-  src="fig-1-photo.png"
-  caption="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)"
-  height="300"
-  width="600"
->}}
 
 > **tl;dr** Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it's highly recommended to use a framework like [Kubebuilder](https://book.kubebuilder.io/) or [OperatorSDK](https://sdk.operatorframework.io/), as shown in this article.
 
@@ -134,6 +123,7 @@ A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to 
   caption="Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)"
   height="150"
   width="400"
+  align="center"
 >}}
 
 The controller (also called the control loop) continuously monitors the state of the cluster and, depending on events, makes changes. Its goal is to bring the current state of a resource towards its desired state, defined by the user in the specification of the custom resource.
@@ -143,6 +133,7 @@ The controller (also called the control loop) continuously monitors the state of
   caption="Fig 3. High-level operation of a controller by [Stefanie Lai](https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1)"
   height="120"
   width="620"
+  align="center"
 >}}
 
 In general, a controller is specific to a type of resource but it can perform CRUD (Create, Read, Update and Delete) operations on a set of different resources.
@@ -196,6 +187,7 @@ A picture is worth more than 1000 words so here is an overview of how the operat
   caption="Fig 4. Overview of the operator's functioning"
   height="300"
   width="600"
+  align="center"
 >}}
 
 And now, here is the implementation of the controller.

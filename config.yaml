@@ -1,61 +1,76 @@
 baseURL: https://leovct.github.io/
 title: leovct.dev
-theme: github.com/nodejh/hugo-theme-mini
+theme: PaperMod
+paginate: 5
 
-languageCode: en-us
-defaultContentLanguage: en
-paginate: 3
-
-hasCJKLanguage: true
-permalinks:
-  posts: /posts/:title/
-
-# Hugo Configure Markup
-# More info: https://gohugo.io/getting-started/configuration-markup#
-markup:
-  highlight:
-    guessSyntax: true
-    style: emacs
-  tableOfContents:
-    endLevel: 3
-    ordered: false
-    startLevel: 2
-  goldmark:
-    renderer:
-      unsafe: true
-
-# Social links in footer (only github, twitter, stackoverflow and facebook)
-social:
-  github: https://github.com/leovct/
-  twitter: https://twitter.com/leoovct
-
-# Site parameters
 params:
-  author: Léo Vincent
-  bio: Software Engineer 🌱
-  description: My blog
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  assets:
+    favicon: favicon.ico
+  
+  # Home page
+  homeInfoParams:
+    Title: Hey, what's up? 🌱
+    Content: |
+      - My name is Léo.
+      I'm an [infrastructure / software engineer](https://flexport.engineering/what-its-like-to-work-as-an-infrastructure-software-engineer-at-flexport-252267999fd9) working at [@Polygon Labs](https://twitter.com/0xPolygonLabs) in the DevTool team (prev: [@Renault Software Factory](https://www.linkedin.com/company/renault-software-factory) & [@INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
+      Sometimes, I write technical articles and take part in hackathons (e.g. Chainlink Spring 2022: [Everest Protocol](https://devpost.com/software/everest-ab708o)).
+      -
+      - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy, gym rat, fond of sports and football :)
+  socialIcons:
+    - name: github
+      url: https://github.com/leovct
+    - name: twitter
+      url: https://twitter.com/leoovct
+    - name: medium
+      url: https://medium.com/@leovct
+  
+  # Posts options
+  showToc: true
+  showReadingTime: true
+  showWordCount: true
+  showCodeCopyButtons: true
+  cover:
+    hidden: true
+    hiddenInSingle: false
+  editPost:
+    URL: https://github.com/leovct/leovct.github.io/tree/main/content/
+    Text: 📝 Suggest changes
+    appendFilePath: true
 
-  ###########################################
-  # Optional Configuration
-  ###########################################
-  enableRSS: true
-  enableComments: false
-  showToc: true # table of contents
-  showPowerBy: true # powerBy message in the page footer
-  math: false # enable math typesetting
-  hiddenPostSummaryInHomePage: false # to hidden post summary in home page
-  copyright: '' # website copy write, default: '© Copyright 2021 ❤️ {params.author}'
+  # Search options
+  # https://fusejs.io/api/options.html
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys:
+      - title
+      - permalink
+      - summary
+      - content
 
-  # Extra links in navigation
-  links:
-    ## e.g.
-    # - name: Project
-    #   path: /project
+# Enable search
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # is necessary
 
-  # Custom css/js
-  customCSS:
-    - css/custom.css
-  customJS:
-    ## e.g.
-    # - js/custom.js # local js in `static/js/custom.js`
-    # - https://example.com/custom.js # remote js
+menu:
+  main:
+    - identifier: search
+      name: search
+      url: /search/
+      weight: 10
+    - identifier: tags
+      name: tags
+      url: /tags/
+      weight: 20
+    - identifier: archives
+      name: archives
+      url: /archives/
+      weight: 30
