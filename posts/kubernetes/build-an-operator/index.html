@@ -320,16 +320,16 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 </blockquote>
 <p>A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to describe its specification and status. We can define instances of the CRD, called custom resources (or CR).</p>
 <figure class="align-center ">
-    <img loading="lazy" src="fig-2-crd-cr.png#center"
-         alt="Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)" width="400" height="150"/> <figcaption>
+    <img loading="lazy" src="fig-2-crd-cr.svg#center"
+         alt="Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)" width="700" height="400"/> <figcaption>
             <p>Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)</p>
         </figcaption>
 </figure>
 
 <p>The controller (also called the control loop) continuously monitors the state of the cluster and, depending on events, makes changes. Its goal is to bring the current state of a resource towards its desired state, defined by the user in the specification of the custom resource.</p>
 <figure class="align-center ">
-    <img loading="lazy" src="fig-3-controller.png#center"
-         alt="Fig 3. High-level operation of a controller by Stefanie Lai" width="620" height="120"/> <figcaption>
+    <img loading="lazy" src="fig-3-controller.svg#center"
+         alt="Fig 3. High-level operation of a controller by Stefanie Lai" width="1000" height="200"/> <figcaption>
             <p>Fig 3. High-level operation of a controller by <a href="https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1">Stefanie Lai</a></p>
         </figcaption>
 </figure>
@@ -367,8 +367,8 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p>Note that the controller also reacts to Pod events (see mapPodsReqToFooReq). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the Pod is a “friend” of one of the Foo custom resources deployed in the cluster.</p>
 <p>A picture is worth more than 1000 words so here is an overview of how the operator works.</p>
 <figure class="align-center ">
-    <img loading="lazy" src="fig-4-foo-operator-overview.png#center"
-         alt="Fig 4. Overview of the operator&amp;rsquo;s functioning" width="600" height="300"/> <figcaption>
+    <img loading="lazy" src="fig-4-foo-operator-overview.svg#center"
+         alt="Fig 4. Overview of the operator&amp;rsquo;s functioning" width="700" height="400"/> <figcaption>
             <p>Fig 4. Overview of the operator&rsquo;s functioning</p>
         </figcaption>
 </figure>
