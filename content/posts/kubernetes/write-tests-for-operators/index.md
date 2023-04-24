@@ -72,10 +72,10 @@ How does the operator work?
 Because a diagram explains ideas way better than three paragraphs, here it is.
 
 {{< figure
-  src="fig-2-foo-operator-overview.png"
+  src="fig-2-foo-operator-overview.svg"
   caption="Fig 2. Overview of the operator's functioning"
-  height="300"
-  width="600"
+  height="400"
+  width="700"
   align="center"
 >}}
 
