@@ -11,10 +11,9 @@ params:
   
   # Home page
   homeInfoParams:
-    Title: Hey, what's up? 🌱
+    Title: Bonjour! 👋
     Content: |
-      - My name is Léo.
-      I'm an [infrastructure / software engineer](https://flexport.engineering/what-its-like-to-work-as-an-infrastructure-software-engineer-at-flexport-252267999fd9) working at [@Polygon Labs](https://twitter.com/0xPolygonLabs) in the DevTool team (prev: [@Renault Software Factory](https://www.linkedin.com/company/renault-software-factory) & [@INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
+      - My name is Léo, I'm an [infrastructure software engineer](https://flexport.engineering/what-its-like-to-work-as-an-infrastructure-software-engineer-at-flexport-252267999fd9) working at [@Polygon Labs](https://twitter.com/0xPolygonLabs) to scale [Ethereum](https://ethereum.org/en/) (prev: [@Renault Software Factory](https://twitter.com/renaultgroup) and [@INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
       Sometimes, I write technical articles and take part in hackathons (e.g. Chainlink Spring 2022: [Everest Protocol](https://devpost.com/software/everest-ab708o)).
       -
       - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy, gym rat, fond of sports and football :)
@@ -23,8 +22,12 @@ params:
       url: https://github.com/leovct
     - name: twitter
       url: https://twitter.com/leoovct
+    - name: linkedin
+      url: https://www.linkedin.com/in/vincentleo/
     - name: medium
       url: https://medium.com/@leovct
+    - name: rss
+      url: https://leovct.github.io/index.xml
   
   # Posts options
   showToc: true
