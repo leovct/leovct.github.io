@@ -1,8 +1,5 @@
-# This workflow runs the markdownlint linter.
-# https://github.com/DavidAnson/markdownlint
-
 ---
-name: Run markdownlint
+name: Run linters
 
 on:
   push:
@@ -16,17 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Create an empty package-lock.json file
-      run: touch package-lock.json
-
     - name: Setup node.js 18.x
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
         cache: 'npm'
     
-    - name: Install markdownlint-cli
-      run: npm install -g markdownlint-cli
-
-    - name: Run markdownlint
+    - name: Install npm dependencies
+      run: npm ci --include=dev
+    
+    - name: Run all linters
       run: make lint
