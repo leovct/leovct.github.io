@@ -8,7 +8,7 @@ help: ## Display this help.
 
 .PHONY: lint
 lint: ## Run Markdown and CSS linters.
-	markdownlint README.md content/ --disable MD013
+	npx markdownlint README.md content/ --disable MD013
 	npx stylelint assets/css/extended/*.css --fix
 
 ##@ Start
