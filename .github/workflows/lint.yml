@@ -24,9 +24,9 @@ jobs:
     
     - name: Install npm dependencies
       run: npm ci --include=dev
-
-    - name: Run Markdown linter
-      run: make markdown-lint
     
     - name: Run CSS linter
       run: make css-lint
+
+    - name: Run Markdown linter
+      run: make markdown-lint
