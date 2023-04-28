@@ -1,8 +1,8 @@
-# This workflow runs the markdownlint linter.
-# https://github.com/DavidAnson/markdownlint
-
+# This workflow runs Markdown and CSS linters.
+# - https://github.com/DavidAnson/markdownlint
+# - https://stylelint.io/
 ---
-name: Run markdownlint
+name: Run linters
 
 on:
   push:
@@ -27,6 +27,9 @@ jobs:
     
     - name: Install markdownlint-cli
       run: npm install -g markdownlint-cli
+    
+    - name: Install stylelint
+      run: npm init stylelint
 
-    - name: Run markdownlint
+    - name: Run linters
       run: make lint
