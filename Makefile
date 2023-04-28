@@ -6,10 +6,16 @@ help: ## Display this help.
 
 ##@ Lint
 
-.PHONY: lint
-lint: ## Run Markdown and CSS linters.
+.PHONY: markdown-lint
+markdown-lint: ## Run Markdown linter.
 	npx markdownlint README.md content/ --disable MD013
+
+.PHONY: css-lint
+css-lint: ## Run CSS linter.
 	npx stylelint assets/css/extended/*.css --fix
+
+.PHONY: lint
+lint: markdown-lint css-lint ## Run all linters.
 
 ##@ Start
 
