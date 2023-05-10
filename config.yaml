@@ -14,8 +14,7 @@ params:
     title: Bonjour! 👋
     image:
       url: cypher-city-318-modified.png
-      title: Cypher City 318
-      link : https://etherscan.io/token/0x00c396383400a1ef2eb401052dbf5d989b2da481?a=318
+      title: Cypher City 318 modified
     content: |
       - My name is Léo, I'm an [infrastructure software engineer](https://flexport.engineering/what-its-like-to-work-as-an-infrastructure-software-engineer-at-flexport-252267999fd9) working at [@Polygon Labs](https://twitter.com/0xPolygonLabs) to scale [Ethereum](https://ethereum.org/en/) (prev: [@Renault Software Factory](https://twitter.com/renaultgroup) and [@INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
       Sometimes, I write technical articles and take part in hackathons (e.g. Chainlink Spring 2022: [Everest Protocol](https://devpost.com/software/everest-ab708o)).
