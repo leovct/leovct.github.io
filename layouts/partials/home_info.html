@@ -5,7 +5,7 @@
     </header>
     
     <div class="home-info-container">
-        <a href="{{ .image.link | absURL }}" target="_blank">
+        <a href="{{ .image.link | absURL }}" target="_blank" rel="noopener">
             <img draggable="false" src="{{ .image.url | absURL }}" alt=" {{ .image.title | default "profile image" }}"
                 title="{{ .image.title }}" height="{{ .image.height | default 150 }}" width="{{ .image.width | default 150 }}" />
         </a>
