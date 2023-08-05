@@ -5,6 +5,7 @@
     <link>https://leovct.github.io/posts/</link>
     <description>Recent content in Posts on leovct.dev</description>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
     <lastBuildDate>Mon, 01 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://leovct.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>🧪 Write tests for Kubernetes operators</title>
