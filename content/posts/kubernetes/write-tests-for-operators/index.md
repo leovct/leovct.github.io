@@ -36,13 +36,11 @@ I choose to use the [Kubebuilder](https://book.kubebuilder.io/) framework to bui
 
 I assume you already have the necessary tools to design an operator (`go`, `docker`, `kubectl`, `kubebuilder` and a small local Kubernetes cluster). But if this is not the case, I strongly recommend that you follow the following [installation steps](https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/#1-set-up-your-environment) so that you can follow along with me during this tutorial.
 
-To focus only on the testing part, I have prepared a simple Kubernetes operator, designed with Kubebuilder. This practical work will be to write tests to validate that the operator’s code meets our expectations and ensure that it does not contain any bugs. I’m going to ask you to clone the project and move to the `operator-v2` branch so we all start from the same base.
+To focus only on the testing part, I have prepared a simple Kubernetes operator, designed with Kubebuilder. This practical work will be to write tests to validate that the operator’s code meets our expectations and ensure that it does not contain any bugs. I’m going to ask you to clone the project and move to the `operator-v2` directory so we all start from the same base.
 
 ```sh
 $ git clone git@github.com:leovct/kubernetes-operator-tutorial.git && \
-    cd kubernetes-operator-tutorial && \
-    git checkout operator-v2 && \
-    git pull origin operator-v2
+    cd kubernetes-operator-tutorial/operator-v2
 ```
 
 If you try to run tests, you’ll see that the coverage equals 0%. Indeed, we haven’t written any tests yet! But this is going to change!
@@ -169,7 +167,7 @@ ok   my.domain/tutorial/controllers 8.434s coverage: 82.4% of statements
 
 Nice, we’ve got no errors! In addition, we went from 0% coverage to over 82%! The last 18% corresponds to the parts of the code that we can’t test (or maybe using mocks but it would be a lot of work for not much). For example, when the controller can’t find the custom resource that triggered the reconciliation loop or when it can’t list the pods in the cluster. It doesn’t matter because we know that we have tested all the operator’s scope.
 
-Here’s the link to the [GitHub repository](https://github.com/leovct/kubernetes-operator-tutorial) if you need to browse the code. The `operator-v2 branch` contains the source code of the operator without the tests, while the tests branch contains the source code with all the tests.
+Here’s the link to the [GitHub repository](https://github.com/leovct/kubernetes-operator-tutorial) if you need to browse the code. The `operator-v2` directory contains the source code of the operator without the tests, while the `operator-v2-with-tests` directory contains the source code with all the tests.
 
 ## To Go Further
 
