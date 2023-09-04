@@ -8,12 +8,12 @@ params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   assets:
     favicon: favicon.ico
-  
+
   # Home page
   homeInfoParams:
     title: Bonjour! 👋
     image:
-      url: cypher-city-318-modified.png
+      url: https://www.pokepedia.fr/images/7/76/Pikachu-DEPS.png
       title: Cypher City 318 modified
     content: |
       - My name is Léo, I'm an [infrastructure software engineer](https://flexport.engineering/what-its-like-to-work-as-an-infrastructure-software-engineer-at-flexport-252267999fd9) working at [@Polygon Labs](https://twitter.com/0xPolygonLabs) to scale [Ethereum](https://ethereum.org/en/) (prev: [@Renault Software Factory](https://twitter.com/renaultgroup) and [@INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
@@ -34,7 +34,7 @@ params:
           url: https://medium.com/@leovct
         - name: rss
           url: https://leovct.github.io/index.xml
-  
+
   # Posts options
   showToc: true
   showReadingTime: true
