@@ -1,5 +1,3 @@
-# This makefile provides helper commands to work with the hugo website.
-
 ##@ Help
 
 .PHONY: help
@@ -8,10 +6,16 @@ help: ## Display this help.
 
 ##@ Lint
 
-# https://github.com/DavidAnson/markdownlint
+.PHONY: markdown-lint
+markdown-lint: ## Run Markdown linter.
+	npx markdownlint README.md content/ --disable MD013
+
+.PHONY: css-lint
+css-lint: ## Run CSS linter.
+	npx stylelint assets/css/extended/*.css --fix
+
 .PHONY: lint
-lint: ## Run markdownlint.
-	markdownlint **/*.md --disable MD013 MD028
+lint: markdown-lint css-lint ## Run all linters.
 
 ##@ Start
 
