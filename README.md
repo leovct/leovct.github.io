@@ -1,5 +1,1 @@
-# 🌱 My blog
-
-This repository is my personal [blog](https://leovct.github.io/)'s source code where I write about technical topics such as infra and blockchain.
-
-The blog is built with [Hugo](https://gohugo.io/) and [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme, and hosted for free on [Github Pages](https://pages.github.com/).
+This is the code repository for my blog where I discuss technical topics like infrastructure and blockchain. The web application is powered by [Hugo](https://gohugo.io/), dressed in the cool vibes of the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) theme, and freely hosted on [Github Pages](https://pages.github.com/).
