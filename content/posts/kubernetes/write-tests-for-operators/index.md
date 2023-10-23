@@ -12,8 +12,6 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)
 ---
 
-> **✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!**
-
 You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!
 
 Let's write some tests to use our operator in production!
@@ -21,6 +19,8 @@ Let's write some tests to use our operator in production!
 In my previous [article](https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/), I showed how to build a Kubernetes operator in about ten minutes - but you must be quick haha! I’ve also described the functioning of an operator, the custom resource definition and custom resources, the controllers, and the manager. If you want to learn more about these concepts, I highly recommend you read the article.
 
 But now it’s time to write some tests to use our operator in production! It’s a subject in its own right that is less complicated than it seems. Most people don’t like writing tests, but they are necessary. They help to improve code quality, detect bugs, and save time and money. So, let’s do some testing!
+
+> **✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!**
 
 ## The Different Types of Tests
 

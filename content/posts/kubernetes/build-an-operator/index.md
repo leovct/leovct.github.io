@@ -12,14 +12,14 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)
 ---
 
-> **✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!**
-
 You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
 If you want to know more, you've come to the right place!
 
 Kubernetes operators is a complicated subject but fortunately, since [their creation](https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html) in 2016, many tools have been developed to simplify the life of engineers.
 
 Without further ado, let’s dive in and learn more about operators!
+
+> **✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!**
 
 > **tl;dr** Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it's highly recommended to use a framework like [Kubebuilder](https://book.kubebuilder.io/) or [OperatorSDK](https://sdk.operatorframework.io/), as shown in this article.
 
