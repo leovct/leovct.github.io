@@ -47,18 +47,12 @@ If you try to run tests, you’ll see that the coverage equals 0%. Indeed, we ha
 
 ```sh
 $ make test
-mkdir -p /Users/leovct/Documents/tutorial/bin
-GOBIN=/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0
-/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
-go fmt ./...
-go vet ./...
-GOBIN=/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
-KUBEBUILDER_ASSETS="/Users/leovct/Library/Application Support/io.kubebuilder.envtest/k8s/1.23.5-darwin-amd64" go test ./... -coverprofile cover.out
-?       my.domain/tutorial      [no test files]
-?       my.domain/tutorial/api/v1       [no test files]
-?       my.domain/tutorial/color        [no test files]
-ok      my.domain/tutorial/controllers  6.220s  coverage: 0.0% of statements
+...
+KUBEBUILDER_ASSETS="/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64" go test ./... -coverprofile cover.out
+?    my.domain/tutorial/api/v1 [no test files]
+?    my.domain/tutorial/cmd [no test files]
+?    my.domain/tutorial/internal/color [no test files]
+ok   my.domain/tutorial/internal/controller 1.329s coverage: 0.0% of statements
 ```
 
 ### 2. Some context on the operator
@@ -107,15 +101,12 @@ Now, if you attempt to run the tests a second time, you’ll see that the code c
 
 ```sh
 $ make test
-/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
-go fmt ./...
-go vet ./...
-KUBEBUILDER_ASSETS="/Users/leovct/Library/Application Support/io.kubebuilder.envtest/k8s/1.23.5-darwin-amd64" go test ./... -coverprofile cover.out
-?       my.domain/tutorial      [no test files]
-?       my.domain/tutorial/api/v1       [no test files]
-ok      my.domain/tutorial/color        0.306s  coverage: 100.0% of statements
-ok      my.domain/tutorial/controllers  6.626s  coverage: 0.0% of statements
+...
+KUBEBUILDER_ASSETS="/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64" go test ./... -coverprofile cover.out
+?    my.domain/tutorial/api/v1 [no test files]
+?    my.domain/tutorial/cmd [no test files]
+ok   my.domain/tutorial/internal/color 0.194s coverage: 100.0% of statements
+ok   my.domain/tutorial/internal/controller 1.329s coverage: 0.0% of statements
 ```
 
 Now, let’s get down to business. We’re going to test how the operator’s reconciliation loop! Trust me, this is the most interesting part of the article!
@@ -154,15 +145,12 @@ We’ve written many great tests that cover our controller's scope. Now it’s t
 
 ```sh
 $ make test
-/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
-go fmt ./...
-go vet ./...
-KUBEBUILDER_ASSETS="/Users/leovct/Library/Application Support/io.kubebuilder.envtest/k8s/1.23.5-darwin-amd64" go test ./... -coverprofile cover.out
-?    my.domain/tutorial [no test files]
+...
+KUBEBUILDER_ASSETS="/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64" go test ./... -coverprofile cover.out
 ?    my.domain/tutorial/api/v1 [no test files]
-ok   my.domain/tutorial/color 0.077s coverage: 100.0% of statements
-ok   my.domain/tutorial/controllers 8.434s coverage: 82.4% of statements
+?    my.domain/tutorial/cmd [no test files]
+ok   my.domain/tutorial/internal/color 0.194s coverage: 100.0% of statements
+ok   my.domain/tutorial/internal/controller 14.421s coverage: 81.8% of statements
 ```
 
 Nice, we’ve got no errors! In addition, we went from 0% coverage to over 82%! The last 18% corresponds to the parts of the code that we can’t test (or maybe using mocks but it would be a lot of work for not much). For example, when the controller can’t find the custom resource that triggered the reconciliation loop or when it can’t list the pods in the cluster. It doesn’t matter because we know that we have tested all the operator’s scope.
