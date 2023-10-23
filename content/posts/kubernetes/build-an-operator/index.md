@@ -12,6 +12,8 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)
 ---
 
+✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!
+
 You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
 If you want to know more, you've come to the right place!
 
@@ -43,7 +45,7 @@ You could either build an operator from scratch using the [controller-runtime](h
 
 You’ll need some tools to develop your operator. Here are the requisites:
 
-- [go](https://go.dev/doc/install) version v1.17.9+
+- [go](https://go.dev/doc/install) version v1.20.0+
 - [docker](https://docs.docker.com/get-docker/) version 17.03+
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/) version v1.11.3+
 
@@ -62,7 +64,7 @@ If everything goes fine, you should see a similar output (the version might have
 
 ```sh
 $ kubebuilder version
-Version: main.version{KubeBuilderVersion:"3.4.1", KubernetesVendor:"1.23.5", GitCommit:"d59d7882ce95ce5de10238e135ddff31d8ede026", BuildDate:"2022-05-06T13:58:56Z", GoOs:"darwin", GoArch:"amd64"}
+Version: main.version{KubeBuilderVersion:"3.12.0", KubernetesVendor:"1.27.1", GitCommit:"b48f95cd5384eadcdfd02a47a02910f72ddc7ea8", BuildDate:"2023-09-06T06:04:11Z", GoOs:"darwin", GoArch:"amd64"}
 ```
 
 Awesome, now we can get started!
@@ -75,40 +77,41 @@ Initialise a new project by running the following command. It will download the 
 
 ```sh
 $ kubebuilder init --domain my.domain --repo my.domain/tutorial
-Writing kustomize manifests for you to edit...
-Writing scaffold for you to edit...
-Get controller runtime:
-$ go get sigs.k8s.io/controller-runtime@v0.11.2
-go: downloading sigs.k8s.io/controller-runtime v0.11.2
+INFO[0000] Writing kustomize manifests for you to edit...
+INFO[0000] Writing scaffold for you to edit...
+INFO[0000] Get controller runtime:
+$ go get sigs.k8s.io/controller-runtime@v0.16.0
 ...
-Update dependencies:
+INFO[0024] Update dependencies:
 $ go mod tidy
-go: downloading github.com/onsi/gomega v1.17.0
 ...
+Next: define a resource with:
+$ kubebuilder create api
 ```
 
 Here’s the structure of the project (as you can notice, it’s a Go project):
 
 ```sh
 $ ls -a
--rw-------   1 leovct  staff    129 Jun 30 16:08 .dockerignore
--rw-------   1 leovct  staff    367 Jun 30 16:08 .gitignore
--rw-------   1 leovct  staff    776 Jun 30 16:08 Dockerfile
--rw-------   1 leovct  staff   5029 Jun 30 16:08 Makefile
--rw-------   1 leovct  staff    104 Jun 30 16:08 PROJECT
--rw-------   1 leovct  staff   2718 Jun 30 16:08 README.md
-drwx------   6 leovct  staff    192 Jun 30 16:08 config
--rw-------   1 leovct  staff   3218 Jun 30 16:08 go.mod
--rw-r--r--   1 leovct  staff  94801 Jun 30 16:08 go.sum
-drwx------   3 leovct  staff     96 Jun 30 16:08 hack
--rw-------   1 leovct  staff   2780 Jun 30 16:08 main.go
+-rw-------   1 leovct  staff    120 Sep 28 05:06 .dockerignore
+-rw-------   1 leovct  staff    384 Sep 28 05:06 .gitignore
+-rw-------   1 leovct  staff   1278 Sep 28 05:06 Dockerfile
+-rw-------   1 leovct  staff   7449 Sep 28 05:06 Makefile
+-rw-------   1 leovct  staff    337 Sep 28 05:06 PROJECT
+-rw-------   1 leovct  staff   2750 Sep 28 05:06 README.md
+drwx------   3 leovct  staff     96 Sep 28 05:06 cmd
+drwx------   6 leovct  staff    192 Sep 28 05:06 config
+-rw-------   1 leovct  staff   2898 Sep 28 05:06 go.mod
+-rw-r--r--   1 leovct  staff  23045 Sep 28 05:06 go.sum
+drwx------   3 leovct  staff     96 Sep 28 05:06 hack
 ```
 
 Let’s go through the most important components of the operator:
 
-- `main.go` is the entry point of the project; it sets up and runs the manager
-- `config/` contains the manifests to deploy the operator in Kubernetes
-- `Dockerfile` is the container file used to build the manager’s image
+- `Dockerfile` is the container file used to build the manager’s image.
+- `Makefile` contains handy helper commands.
+- `cmd/main.go` is the entry point of the project; it sets up and runs the manager.
+- `config/` contains the manifests to deploy the operator in Kubernetes.
 
 **Wait, what’s this manager component?!**
 
@@ -148,25 +151,27 @@ Now that we know how an operator works, we can start to create one using the Kub
 
 ```sh
 $ kubebuilder create api --group tutorial --version v1 --kind Foo
-Create Resource [y/n] y
-Create Controller [y/n] y
-Writing kustomize manifests for you to edit...
-Writing scaffold for you to edit...
-api/v1/foo_types.go
-controllers/foo_controller.go
-Update dependencies:
+INFO[0000] Create Resource [y/n] y
+INFO[0002] Create Controller [y/n] y
+INFO[0003] Writing kustomize manifests for you to edit...
+INFO[0003] Writing scaffold for you to edit...
+INFO[0003] api/v1/foo_types.go
+INFO[0003] api/v1/groupversion_info.go
+INFO[0003] internal/controller/suite_test.go
+INFO[0003] internal/controller/foo_controller.go
+INFO[0003] Update dependencies:
 $ go mod tidy
-Running make:
+INFO[0004] Running make:
 $ make generate
-mkdir -p /Users/leovct/Documents/tutorial/bin
-GOBIN=/Users/leovct/Documents/tutorial/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.8.0
-/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+...
+Next: implement your new API and generate the manifests (e.g. CRDs,CRs) with:
+$ make manifests
 ```
 
 This is where the fun starts now! We’ll customise the CRD and the controller to meet our needs. You’ll notice that two new folders have been created:
 
-- `api/v1/` which contains our Foo CRD (see `foo_types.go`)
-- `controllers/` which contain the Foo controller (see `foo_controller.go`)
+- `api/v1` which contains our Foo CRD (see `foo_types.go`).
+- `internal/controllers` which contain the Foo controller (see `foo_controller.go`).
 
 ### 3. Customize the CRD and the controller
 
@@ -178,7 +183,7 @@ The Foo CRD has a `name` field in its specification which refers to the name of 
 
 Now, let’s implement the logic of the controller. Nothing very complicated here. We fetch the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, we list all the pods that have the same name as Foo’s friend. If we find one (or more), we update Foo’s `happy` status to `true`, else we set it to `false`.
 
-Note that the controller also reacts to Pod events (see mapPodsReqToFooReq). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the Pod is a “friend” of one of the Foo custom resources deployed in the cluster.
+Note that the controller also reacts to Pod events (see `mapPodsReqToFooReq`). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the `Pod` is a “friend” of one of the Foo custom resources deployed in the cluster.
 
 A picture is worth more than 1000 words so here is an overview of how the operator works.
 
@@ -209,8 +214,9 @@ First, we install the CRDs into the cluster.
 
 ```sh
 $ make install
-/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-kubectl apply -k config/crd
+/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+...
+/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/kustomize build config/crd | kubectl apply -f -
 customresourcedefinition.apiextensions.k8s.io/foos.tutorial.my.domain created
 ```
 
@@ -219,26 +225,23 @@ You can see that the Foo CRD has been created.
 ```sh
 $ kubectl get crds
 NAME                               CREATED AT
-foos.tutorial.my.domain            2022-06-30T17:02:45Z
+foos.tutorial.my.domain            2023-10-09T17:31:57Z
 ```
 
 Then we run the controller in the terminal. Keep in mind that we can also deploy it as deployment in the Kubernetes cluster.
 
 ```sh
 $ make run
-/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-/Users/leovct/Documents/tutorial/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
-go fmt ./...
-go vet ./...
-go run ./main.go
-INFO controller-runtime.metrics Metrics server is starting to listen {"addr": ":8080"}
-INFO setup starting manager
-INFO Starting server {"path": "/metrics", "kind": "metrics", "addr": "[::]:8080"}
-INFO Starting server {"kind": "health probe", "addr": "[::]:8081"}
-INFO controller.foo Starting EventSource {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "source": "kind source: *v1.Foo"}
-INFO controller.foo Starting EventSource {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "source": "kind source:*v1.Pod"}
-INFO controller.foo Starting Controller {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo"}
-INFO controller.foo Starting workers {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "worker count": 1}
+...
+go run ./cmd/main.go
+2023-10-09T19:33:10+02:00 INFO setup starting manager
+2023-10-09T19:33:10+02:00 INFO controller-runtime.metrics Starting metrics server
+2023-10-09T19:33:10+02:00 INFO starting server {"kind": "health probe", "addr": "[::]:8081"}
+2023-10-09T19:33:10+02:00 INFO controller-runtime.metrics Serving metrics server {"bindAddress": ":8080", "secure": false}
+2023-10-09T19:33:10+02:00 INFO Starting EventSource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "source": "kind source: *v1.Foo"}
+2023-10-09T19:33:10+02:00 INFO Starting Controller {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo"}
+2023-10-09T19:33:10+02:00 INFO Starting workers {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "worker count": 1}
+
 ```
 
 As you can see, the manager started and then the Foo controller started. The controller is now running and listening to events!
