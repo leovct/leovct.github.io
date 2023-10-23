@@ -12,7 +12,7 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)
 ---
 
-✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!
+> **✨ The article was updated to use the latest version of kubebuilder ([v3.12.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.12.0)), released in September 2023!**
 
 You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
 If you want to know more, you've come to the right place!
