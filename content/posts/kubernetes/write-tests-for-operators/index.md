@@ -20,7 +20,7 @@ In my previous [article](https://leovct.github.io/posts/build-a-kubernetes-opera
 
 But now it’s time to write some tests to use our operator in production! It’s a subject in its own right that is less complicated than it seems. Most people don’t like writing tests, but they are necessary. They help to improve code quality, detect bugs, and save time and money. So, let’s do some testing!
 
-> **✨ The article was updated to use the latest version of kubebuilder ([v3.13.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.13.0)), released in September 2023!**
+> **✨ The article was updated to use the latest version of kubebuilder ([v3.13.0](https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v3.13.0)), released in November 2023!**
 
 ## The Different Types of Tests
 
