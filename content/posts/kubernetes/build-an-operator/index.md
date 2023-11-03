@@ -333,25 +333,6 @@ Spec:
   Name:  joe
 Status:
 Events:  <none>
-
-
-Name:         foo-sample
-Namespace:    default
-Labels:       app.kubernetes.io/created-by=operator-v1-new
-              app.kubernetes.io/instance=foo-sample
-              app.kubernetes.io/managed-by=kustomize
-              app.kubernetes.io/name=foo
-              app.kubernetes.io/part-of=operator-v1-new
-Annotations:  <none>
-API Version:  tutorial.my.domain/v1
-Kind:         Foo
-Metadata:
-  Creation Timestamp:  2023-11-03T08:16:40Z
-  Generation:          1
-  Resource Version:    701
-  UID:                 7d361478-8d3c-4f39-b707-7a315127c301
-Status:
-Events:  <none>
 ```
 
 Now, let’s spice things up! We’ll deploy a pod named `jack` to see how the system reacts.
