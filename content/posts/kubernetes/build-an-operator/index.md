@@ -260,7 +260,6 @@ go run ./cmd/main.go
 2023-11-03T09:15:42+01:00       INFO    Starting EventSource    {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "source": "kind source: *v1.Pod"}
 2023-11-03T09:15:42+01:00       INFO    Starting Controller     {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo"}
 2023-11-03T09:15:42+01:00       INFO    Starting workers        {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "worker count": 1}
-
 ```
 
 As you can see, the manager started and then the Foo controller started. The controller is now running and listening to events!
