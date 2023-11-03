@@ -76,6 +76,7 @@ Let’s do a little exercise: we’ll build a simple foo operator which has no r
 Initialise a new project by running the following command. It will download the controller-runtime binary and scaffold a project that’s ready for us to customise.
 
 ```sh
+$ kubebuilder init --domain my.domain --repo my.domain/tutorial
 INFO Writing kustomize manifests for you to edit...
 INFO Writing scaffold for you to edit...
 INFO Get controller runtime:
