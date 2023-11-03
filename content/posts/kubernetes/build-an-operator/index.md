@@ -64,7 +64,7 @@ If everything goes fine, you should see a similar output (the version might have
 
 ```sh
 $ kubebuilder version
-Version: main.version{KubeBuilderVersion:"3.12.0", KubernetesVendor:"1.27.1", GitCommit:"b48f95cd5384eadcdfd02a47a02910f72ddc7ea8", BuildDate:"2023-09-06T06:04:11Z", GoOs:"darwin", GoArch:"amd64"}
+Version: main.version{KubeBuilderVersion:"3.13.0", KubernetesVendor:"1.27.1", GitCommit:"c8a7cc58eeb56586c019cf8845dad37286d077ff", BuildDate:"2023-11-02T20:43:44Z", GoOs:"darwin", GoArch:"amd64"}
 ```
 
 Awesome, now we can get started!
@@ -77,14 +77,13 @@ Initialise a new project by running the following command. It will download the 
 
 ```sh
 $ kubebuilder init --domain my.domain --repo my.domain/tutorial
-INFO[0000] Writing kustomize manifests for you to edit...
-INFO[0000] Writing scaffold for you to edit...
-INFO[0000] Get controller runtime:
-$ go get sigs.k8s.io/controller-runtime@v0.16.0
+INFO Writing kustomize manifests for you to edit...
+INFO Writing scaffold for you to edit...
+INFO Get controller runtime:
+$ go get sigs.k8s.io/controller-runtime@v0.16.3
 ...
-INFO[0024] Update dependencies:
+INFO Update dependencies:
 $ go mod tidy
-...
 Next: define a resource with:
 $ kubebuilder create api
 ```
@@ -92,28 +91,37 @@ $ kubebuilder create api
 Here’s the structure of the project (as you can notice, it’s a Go project):
 
 ```sh
-$ ls -a
--rw-------   1 leovct  staff    120 Sep 28 05:06 .dockerignore
--rw-------   1 leovct  staff    384 Sep 28 05:06 .gitignore
--rw-------   1 leovct  staff   1278 Sep 28 05:06 Dockerfile
--rw-------   1 leovct  staff   7449 Sep 28 05:06 Makefile
--rw-------   1 leovct  staff    337 Sep 28 05:06 PROJECT
--rw-------   1 leovct  staff   2750 Sep 28 05:06 README.md
-drwx------   3 leovct  staff     96 Sep 28 05:06 cmd
-drwx------   6 leovct  staff    192 Sep 28 05:06 config
--rw-------   1 leovct  staff   2898 Sep 28 05:06 go.mod
--rw-r--r--   1 leovct  staff  23045 Sep 28 05:06 go.sum
-drwx------   3 leovct  staff     96 Sep 28 05:06 hack
+$ ls -la
+total 120
+drwxr-xr-x  17 leovct  staff    544 Nov  3 08:49 .
+drwxr-xr-x  10 leovct  staff    320 Nov  3 08:49 ..
+-rw-------   1 leovct  staff    120 Nov  3 08:49 .dockerignore
+-rw-------   1 leovct  staff    384 Nov  3 08:49 .gitignore
+-rw-------   1 leovct  staff    692 Nov  3 08:49 .golangci.yml
+-rw-------   1 leovct  staff   1278 Nov  3 08:49 Dockerfile
+-rw-------   1 leovct  staff   7966 Nov  3 08:49 Makefile
+-rw-------   1 leovct  staff    508 Nov  3 08:49 PROJECT
+-rw-------   1 leovct  staff   2419 Nov  3 08:49 README.md
+drwx------   3 leovct  staff     96 Nov  3 08:49 api
+drwxr-xr-x   3 leovct  staff     96 Nov  3 08:50 bin
+drwx------   3 leovct  staff     96 Nov  3 08:49 cmd
+drwx------   8 leovct  staff    256 Nov  3 08:49 config
+-rw-------   1 leovct  staff   3156 Nov  3 08:49 go.mod
+-rw-r--r--   1 leovct  staff  20603 Nov  3 08:49 go.sum
+drwx------   3 leovct  staff     96 Nov  3 08:49 hack
+drwx------   3 leovct  staff     96 Nov  3 08:49 internal
 ```
 
 Let’s go through the most important components of the operator:
 
 - `Dockerfile` is the container file used to build the manager’s image.
 - `Makefile` contains handy helper commands.
+- `api/v1` contains the definition of the `Foo` CRD.
 - `cmd/main.go` is the entry point of the project; it sets up and runs the manager.
-- `config/` contains the manifests to deploy the operator in Kubernetes.
+- `config/` contains the manifests to deploy the operator and CRDs in Kubernetes.
+- `internal/controller` contains the logic of the `Foo` controller.
 
-**Wait, what’s this manager component?!**
+**Wait, what’s this controller component?!**
 
 This is going to be a bit theoretical. Hang on!
 
@@ -151,17 +159,20 @@ Now that we know how an operator works, we can start to create one using the Kub
 
 ```sh
 $ kubebuilder create api --group tutorial --version v1 --kind Foo
-INFO[0000] Create Resource [y/n] y
-INFO[0002] Create Controller [y/n] y
-INFO[0003] Writing kustomize manifests for you to edit...
-INFO[0003] Writing scaffold for you to edit...
-INFO[0003] api/v1/foo_types.go
-INFO[0003] api/v1/groupversion_info.go
-INFO[0003] internal/controller/suite_test.go
-INFO[0003] internal/controller/foo_controller.go
-INFO[0003] Update dependencies:
+
+INFO Create Resource [y/n]
+y
+INFO Create Controller [y/n]
+y
+INFO Writing kustomize manifests for you to edit...
+INFO Writing scaffold for you to edit...
+INFO api/v1/foo_types.go
+INFO api/v1/groupversion_info.go
+INFO internal/controller/suite_test.go
+INFO internal/controller/foo_controller.go
+INFO Update dependencies:
 $ go mod tidy
-INFO[0004] Running make:
+INFO Running make:
 $ make generate
 ...
 Next: implement your new API and generate the manifests (e.g. CRDs,CRs) with:
@@ -203,7 +214,7 @@ We’re done editing the API definitions and the controller so we can run the fo
 
 ```sh
 $ make manifests
-/Users/leovct/Documents/tutorial/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 ```
 
 ### 4. Run the controller
@@ -214,8 +225,10 @@ First, we install the CRDs into the cluster.
 
 ```sh
 $ make install
-/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+test -s /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen && /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen --version | grep -q v0.13.0 || \
+        GOBIN=/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
 ...
+/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/kustomize build config/crd | kubectl apply -f -
 customresourcedefinition.apiextensions.k8s.io/foos.tutorial.my.domain created
 ```
@@ -224,38 +237,43 @@ You can see that the Foo CRD has been created.
 
 ```sh
 $ kubectl get crds
-NAME                               CREATED AT
-foos.tutorial.my.domain            2023-10-09T17:31:57Z
+NAME                      CREATED AT
+foos.tutorial.my.domain   2023-11-03T08:14:04Z
 ```
 
 Then we run the controller in the terminal. Keep in mind that we can also deploy it as deployment in the Kubernetes cluster.
 
 ```sh
 $ make run
-...
+test -s /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen && /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen --version | grep -q v0.13.0 || \
+        GOBIN=/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+go fmt ./...
+go vet ./...
 go run ./cmd/main.go
-2023-10-09T19:33:10+02:00 INFO setup starting manager
-2023-10-09T19:33:10+02:00 INFO controller-runtime.metrics Starting metrics server
-2023-10-09T19:33:10+02:00 INFO starting server {"kind": "health probe", "addr": "[::]:8081"}
-2023-10-09T19:33:10+02:00 INFO controller-runtime.metrics Serving metrics server {"bindAddress": ":8080", "secure": false}
-2023-10-09T19:33:10+02:00 INFO Starting EventSource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "source": "kind source: *v1.Foo"}
-2023-10-09T19:33:10+02:00 INFO Starting Controller {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo"}
-2023-10-09T19:33:10+02:00 INFO Starting workers {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "worker count": 1}
-
+2023-11-03T09:15:42+01:00       INFO    setup   starting manager
+2023-11-03T09:15:42+01:00       INFO    starting server {"kind": "health probe", "addr": "[::]:8081"}
+2023-11-03T09:15:42+01:00       INFO    controller-runtime.metrics      Starting metrics server
+2023-11-03T09:15:42+01:00       INFO    controller-runtime.metrics      Serving metrics server  {"bindAddress": ":8080", "secure": false}
+2023-11-03T09:15:42+01:00       INFO    Starting EventSource    {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "source": "kind source: *v1.Foo"}
+2023-11-03T09:15:42+01:00       INFO    Starting EventSource    {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "source": "kind source: *v1.Pod"}
+2023-11-03T09:15:42+01:00       INFO    Starting Controller     {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo"}
+2023-11-03T09:15:42+01:00       INFO    Starting workers        {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "worker count": 1}
 ```
 
 As you can see, the manager started and then the Foo controller started. The controller is now running and listening to events!
 
 ### 5. Test the controller
 
-To test that everything works properly, we’ll create two Foo custom resources and some pods just to see how the controller behaves.
+To test that everything works properly, we’ll create two Foo custom resources and some pods just to see how the controller behaves. You can modify `config/samples/tutorial_v1_foo.yaml`.
 
 First, create the Foo custom resources manifests in config/samples and run the following command to create the resources in your local Kubernetes cluster.
 
 {{< gist leovct c41cb1ded81ac74486dd01e776545daf >}}
 
 ```sh
-$ kubectl apply -f config/samples
+$ kubectl apply -k config/samples
 foo.tutorial.my.domain/foo-1 created
 foo.tutorial.my.domain/foo-2 created
 ```
@@ -263,34 +281,58 @@ foo.tutorial.my.domain/foo-2 created
 You should see that the controller triggered two reconciliation loops for each Foo custom resource creation event. You may wonder why two loops were triggered for each custom resource and not one, this is a more technical topic, I invite you to read this [thread](https://github.com/leovct/kubernetes-operator-tutorial/issues/2).
 
 ```sh
-INFO controller.foo reconciling foo custom resource {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default"}
-INFO controller.foo foo's happy status updated {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default", "status": "false"}
-INFO controller.foo foo custom resource reconciled {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default"}
-INFO controller.foo reconciling foo custom resource {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-2", "namespace": "default"}
-INFO controller.foo foo's happy status updated {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-2", "namespace": "default", "status": "false"}
-INFO controller.foo foo custom resource reconciled {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-2", "namespace": "default"}
+2023-11-03T09:16:40+01:00       INFO    reconciling foo custom resource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "c98a2469-159f-4c3f-b9bb-aa02b6dd5bf9"}
+2023-11-03T09:16:40+01:00       INFO    foo's happy status updated      {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "c98a2469-159f-4c3f-b9bb-aa02b6dd5bf9", "status": false}
+2023-11-03T09:16:40+01:00       INFO    foo custom resource reconciled  {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "c98a2469-159f-4c3f-b9bb-aa02b6dd5bf9"}
+2023-11-03T09:16:40+01:00       INFO    reconciling foo custom resource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "d747fc5a-3465-4c56-843f-0f4d87d2e3f0"}
+2023-11-03T09:16:40+01:00       INFO    foo's happy status updated      {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "d747fc5a-3465-4c56-843f-0f4d87d2e3f0", "status": false}
+2023-11-03T09:16:40+01:00       INFO    foo custom resource reconciled  {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "d747fc5a-3465-4c56-843f-0f4d87d2e3f0"}
 ```
 
 If you check the status of the Foo custom resources, you can see that their status is empty. That’s exactly what we expect so everything’s good so far!
 
 ```sh
 $ kubectl describe foos
-Name:         foo-1
+Name:         foo-01
 Namespace:    default
+Labels:       app.kubernetes.io/created-by=operator-v1
+              app.kubernetes.io/instance=foo-sample
+              app.kubernetes.io/managed-by=kustomize
+              app.kubernetes.io/name=foo
+              app.kubernetes.io/part-of=operator-v1
+Annotations:  <none>
 API Version:  tutorial.my.domain/v1
 Kind:         Foo
-Metadata:     ...
+Metadata:
+  Creation Timestamp:  2023-11-03T08:18:01Z
+  Generation:          1
+  Resource Version:    808
+  UID:                 fbda3c29-83d4-4e03-92e0-78f33f900b25
 Spec:
-  Name:       jack
+  Name:  jack
 Status:
-Name:         foo-2
+Events:  <none>
+
+
+Name:         foo-02
 Namespace:    default
+Labels:       app.kubernetes.io/created-by=operator-v1
+              app.kubernetes.io/instance=foo-sample
+              app.kubernetes.io/managed-by=kustomize
+              app.kubernetes.io/name=foo
+              app.kubernetes.io/part-of=operator-v1
+Annotations:  <none>
 API Version:  tutorial.my.domain/v1
 Kind:         Foo
-Metadata:     ...
+Metadata:
+  Creation Timestamp:  2023-11-03T08:18:01Z
+  Generation:          1
+  Resource Version:    810
+  UID:                 ca34e5dc-f2d9-4caf-9239-bbd190bc9c9d
 Spec:
-  Name:       joe
+  Name:  joe
 Status:
+Events:  <none>
 ```
 
 Now, let’s spice things up! We’ll deploy a pod named `jack` to see how the system reacts.
@@ -300,19 +342,23 @@ Now, let’s spice things up! We’ll deploy a pod named `jack` to see how the s
 Once done, you should see that the controller reacts to the pod creation event. It then updates the status of the first Foo custom resource as expected. You can verify by yourself by describing the Foo custom resources.
 
 ```sh
-INFO pod linked to a foo custom resource issued an event {"name": "jack"}
-INFO controller.foo reconciling foo custom resource {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default"}
-INFO controller.foo pod linked to a foo custom resource found {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default", "name": "jack"}
-INFO controller.foo foo's happy status updated {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default", "status": true}
-INFO controller.foo foo custom resource reconciled {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-1", "namespace": "default"}
+2023-11-03T09:26:25+01:00       INFO    pod linked to a foo custom resource issued an event     {"name": "jack"}
+2023-11-03T09:26:25+01:00       INFO    pod linked to a foo custom resource issued an event     {"name": "jack"}
+2023-11-03T09:26:25+01:00       INFO    reconciling foo custom resource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-01","namespace":"default"}, "namespace": "default", "name": "foo-01", "reconcileID": "ec16b29b-4bae-4909-8392-8966c3e10ad4"}
+2023-11-03T09:26:25+01:00       INFO    pod linked to a foo custom resource found       {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-01","namespace":"default"}, "namespace": "default", "name": "foo-01", "reconcileID": "ec16b29b-4bae-4909-8392-8966c3e10ad4", "name": "jack"}
+2023-11-03T09:26:25+01:00       INFO    foo's happy status updated      {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-01","namespace":"default"}, "namespace": "default", "name": "foo-01", "reconcileID": "ec16b29b-4bae-4909-8392-8966c3e10ad4", "status": true}
+2023-11-03T09:26:25+01:00       INFO    foo custom resource reconciled  {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-01","namespace":"default"}, "namespace": "default", "name": "foo-01", "reconcileID": "ec16b29b-4bae-4909-8392-8966c3e10ad4"}
 ```
 
 Let’s update the specification of the second Foo custom resource and change the value of its name field from `joe` to `jack`. The controller should catch the update event and trigger a reconciliation loop.
 
 ```sh
-INFO controller.foo pod linked to a foo custom resource found {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-2", "namespace": "default", "name": "jack"}
-INFO controller.foo foo's happy status updated {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-2", "namespace": "default", "status": true}
-INFO controller.foo foo custom resource reconciled {"reconciler group": "tutorial.my.domain", "reconciler kind": "Foo", "name": "foo-2", "namespace": "default"}
+2023-11-03T09:27:18+01:00       INFO    pod linked to a foo custom resource issued an event     {"name": "joe"}
+2023-11-03T09:27:18+01:00       INFO    pod linked to a foo custom resource issued an event     {"name": "joe"}
+2023-11-03T09:27:18+01:00       INFO    reconciling foo custom resource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-02","namespace":"default"}, "namespace": "default", "name": "foo-02", "reconcileID": "d7e94353-94ae-4883-b5de-1d50c966448f"}
+2023-11-03T09:27:18+01:00       INFO    pod linked to a foo custom resource found       {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-02","namespace":"default"}, "namespace": "default", "name": "foo-02", "reconcileID": "d7e94353-94ae-4883-b5de-1d50c966448f", "name": "joe"}
+2023-11-03T09:27:18+01:00       INFO    foo's happy status updated      {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-02","namespace":"default"}, "namespace": "default", "name": "foo-02", "reconcileID": "d7e94353-94ae-4883-b5de-1d50c966448f", "status": true}
+2023-11-03T09:27:18+01:00       INFO    foo custom resource reconciled  {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-02","namespace":"default"}, "namespace": "default", "name": "foo-02", "reconcileID": "d7e94353-94ae-4883-b5de-1d50c966448f"}
 ```
 
 Yeah, it worked! Enough tests for today; I think you got it! If you delete the pod named `jack`, the custom resources’ `happy` status will be set back to `false`.

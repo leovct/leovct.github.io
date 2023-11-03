@@ -41,8 +41,8 @@ I assume you already have the necessary tools to design an operator (`go`, `dock
 To focus only on the testing part, I have prepared a simple Kubernetes operator, designed with Kubebuilder. This practical work will be to write tests to validate that the operator’s code meets our expectations and ensure that it does not contain any bugs. I’m going to ask you to clone the project and move to the `operator-v2` directory so we all start from the same base.
 
 ```sh
-$ git clone git@github.com:leovct/kubernetes-operator-tutorial.git && \
-    cd kubernetes-operator-tutorial/operator-v2
+$ git clone git@github.com:leovct/kubernetes-operator-tutorial.git \
+    && cd kubernetes-operator-tutorial/operator-v2
 ```
 
 If you try to run tests, you’ll see that the coverage equals 0%. Indeed, we haven’t written any tests yet! But this is going to change!
@@ -51,10 +51,10 @@ If you try to run tests, you’ll see that the coverage equals 0%. Indeed, we ha
 $ make test
 ...
 KUBEBUILDER_ASSETS="/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64" go test ./... -coverprofile cover.out
-?    my.domain/tutorial/api/v1 [no test files]
-?    my.domain/tutorial/cmd [no test files]
-?    my.domain/tutorial/internal/color [no test files]
-ok   my.domain/tutorial/internal/controller 1.329s coverage: 0.0% of statements
+?       my.domain/tutorial/api/v1       [no test files]
+?       my.domain/tutorial/cmd  [no test files]
+?       my.domain/tutorial/internal/color       [no test files]
+ok      my.domain/tutorial/internal/controller  2.129s  coverage: 0.0% of statements
 ```
 
 ### 2. Some context on the operator
@@ -105,10 +105,10 @@ Now, if you attempt to run the tests a second time, you’ll see that the code c
 $ make test
 ...
 KUBEBUILDER_ASSETS="/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64" go test ./... -coverprofile cover.out
-?    my.domain/tutorial/api/v1 [no test files]
-?    my.domain/tutorial/cmd [no test files]
-ok   my.domain/tutorial/internal/color 0.194s coverage: 100.0% of statements
-ok   my.domain/tutorial/internal/controller 1.329s coverage: 0.0% of statements
+?       my.domain/tutorial/api/v1       [no test files]
+?       my.domain/tutorial/cmd  [no test files]
+ok      my.domain/tutorial/internal/color       0.319s  coverage: 100.0% of statements
+ok      my.domain/tutorial/internal/controller  2.109s  coverage: 0.0% of statements
 ```
 
 Now, let’s get down to business. We’re going to test how the operator’s reconciliation loop! Trust me, this is the most interesting part of the article!
@@ -149,10 +149,10 @@ We’ve written many great tests that cover our controller's scope. Now it’s t
 $ make test
 ...
 KUBEBUILDER_ASSETS="/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64" go test ./... -coverprofile cover.out
-?    my.domain/tutorial/api/v1 [no test files]
-?    my.domain/tutorial/cmd [no test files]
-ok   my.domain/tutorial/internal/color 0.194s coverage: 100.0% of statements
-ok   my.domain/tutorial/internal/controller 14.421s coverage: 81.8% of statements
+?       my.domain/tutorial/api/v1       [no test files]
+?       my.domain/tutorial/cmd  [no test files]
+ok      my.domain/tutorial/internal/color       0.443s  coverage: 100.0% of statements
+ok      my.domain/tutorial/internal/controller  16.166s coverage: 81.8% of statements
 ```
 
 Nice, we’ve got no errors! In addition, we went from 0% coverage to over 82%! The last 18% corresponds to the parts of the code that we can’t test (or maybe using mocks but it would be a lot of work for not much). For example, when the controller can’t find the custom resource that triggered the reconciliation loop or when it can’t list the pods in the cluster. It doesn’t matter because we know that we have tested all the operator’s scope.
