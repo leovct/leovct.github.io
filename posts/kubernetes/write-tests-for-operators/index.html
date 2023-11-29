@@ -276,6 +276,7 @@ if (!doNotTrack) {
 <p>The “Foo” operator you cloned is similar to the one I built in my “<a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/">Build a Kubernetes Operator in 10 minutes</a>” article. It has no real purpose except to show how you can use operators to perform simple tasks in Kubernetes.</p>
 <p>How does the operator work?</p>
 <p>Because a diagram explains ideas way better than three paragraphs, here it is.</p>
+<!-- raw HTML omitted -->
 <figure class="align-center ">
     <img loading="lazy" src="fig-2-foo-operator-overview.svg#center"
          alt="Fig 2. Overview of the operator&amp;rsquo;s functioning" width="700" height="400"/> <figcaption>
@@ -283,6 +284,7 @@ if (!doNotTrack) {
         </figcaption>
 </figure>
 
+<!-- raw HTML omitted -->
 <p>First, there is the Foo Custom Resource Definition or CRD (see <code>api/v1/foo_types.go</code>). It has a <code>name</code> field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a Pod with the same name as his friend), its <code>happy</code> status will be set to <code>true</code>. A small addition since the previous tutorial, the status of Foo also contains a <code>color</code> field, determined according to its name and the namespace in which it evolves.</p>
 <p>Second, there is the Foo Controller (see <code>controllers/foo_controller.go</code>). It fetches the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, it lists all the pods with the same name as Foo’s friend. If at least one friend has been found, it updates Foo’s <code>happy</code> status to <code>true</code>, else we set it to <code>false</code>. It also updates Foo’s <code>color</code> status.</p>
 <p>Note that the controller also reacts to Pod events (see <code>mapPodsReqToFooReq</code>). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the Pod&rsquo;s name is a “friend” of one of the Foo custom resources deployed in the cluster.</p>
