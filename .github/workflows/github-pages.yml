@@ -1,15 +1,6 @@
-# This workflow deploys a hugo server to Github Pages.
----
 name: Deploy to Github
 
-on:
-  push:
-    branches:
-      - '*'
-    paths-ignore:
-      - '.gitignore'
-      - 'Makefile'
-      - 'README.md'
+on: push
 
 jobs:
   deploy:

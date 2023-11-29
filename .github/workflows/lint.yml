@@ -1,11 +1,6 @@
----
-name: Run linters
+name: Run linter
 
-on:
-  push:
-    branches:
-      - '*'
-  pull_request:
+on: push
 
 env:
   PNPM_VERSION: '8' # https://www.npmjs.com/package/pnpm
