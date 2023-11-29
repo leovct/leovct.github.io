@@ -65,6 +65,7 @@ How does the operator work?
 
 Because a diagram explains ideas way better than three paragraphs, here it is.
 
+<!-- prettier-ignore-start -->
 {{< figure
   src="fig-2-foo-operator-overview.svg"
   caption="Fig 2. Overview of the operator's functioning"
@@ -72,6 +73,7 @@ Because a diagram explains ideas way better than three paragraphs, here it is.
   width="700"
   align="center"
 >}}
+<!-- prettier-ignore-end -->
 
 First, there is the Foo Custom Resource Definition or CRD (see `api/v1/foo_types.go`). It has a `name` field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a Pod with the same name as his friend), its `happy` status will be set to `true`. A small addition since the previous tutorial, the status of Foo also contains a `color` field, determined according to its name and the namespace in which it evolves.
 
