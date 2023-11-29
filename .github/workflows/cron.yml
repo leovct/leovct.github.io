@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Update submodules
-        run: make update
+        run: pnpm run update
 
       - name: Check for changes
         id: check_changes
