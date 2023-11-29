@@ -1,8 +1,19 @@
 {
+  "name": "website",
+  "version": "1.0.0",
+  "description": "Personal website",
+  "main": "index.js",
+  "scripts": {
+    "start": "hugo server",
+    "check": "pnpm exec prettier --check .",
+    "lint": "pnpm exec prettier --write .",
+    "update": "cd themes/PaperMod && git pull origin master"
+  },
+  "keywords": [],
+  "author": "@leovct",
+  "license": "ISC",
   "devDependencies": {
-    "markdownlint-cli": "^0.33.0",
-    "stylelint": "^15.10.1",
-    "stylelint-config-standard": "^33.0.0",
-    "stylelint-order": "^6.0.3"
+    "prettier": "^3.1.0",
+    "prettier-plugin-go-template": "^0.0.15"
   }
 }

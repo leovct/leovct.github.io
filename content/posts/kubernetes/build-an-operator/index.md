@@ -129,6 +129,7 @@ This is going to be a bit theoretical. Hang on!
 
 A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to describe its specification and status. We can define instances of the CRD, called custom resources (or CR).
 
+<!-- prettier-ignore-start -->
 {{< figure
   src="fig-2-crd-cr.svg"
   caption="Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)"
@@ -136,9 +137,11 @@ A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to 
   width="700"
   align="center"
 >}}
+<!-- prettier-ignore-end -->
 
 The controller (also called the control loop) continuously monitors the state of the cluster and, depending on events, makes changes. Its goal is to bring the current state of a resource towards its desired state, defined by the user in the specification of the custom resource.
 
+<!-- prettier-ignore-start -->
 {{< figure
   src="fig-3-controller.svg"
   caption="Fig 3. High-level operation of a controller by [Stefanie Lai](https://medium.com/swlh/kubernetes-operator-for-beginners-what-why-how-21b23f0cb9b1)"
@@ -146,6 +149,7 @@ The controller (also called the control loop) continuously monitors the state of
   width="1000"
   align="center"
 >}}
+<!-- prettier-ignore-end -->
 
 In general, a controller is specific to a type of resource but it can perform CRUD (Create, Read, Update and Delete) operations on a set of different resources.
 
@@ -198,6 +202,7 @@ Note that the controller also reacts to Pod events (see `mapPodsReqToFooReq`). I
 
 A picture is worth more than 1000 words so here is an overview of how the operator works.
 
+<!-- prettier-ignore-start -->
 {{< figure
   src="fig-4-foo-operator-overview.svg"
   caption="Fig 4. Overview of the operator's functioning"
@@ -205,6 +210,7 @@ A picture is worth more than 1000 words so here is an overview of how the operat
   width="700"
   align="center"
 >}}
+<!-- prettier-ignore-end -->
 
 And now, here is the implementation of the controller.
 

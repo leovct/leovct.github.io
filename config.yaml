@@ -8,7 +8,7 @@ params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   assets:
     favicon: favicon.ico
-  
+
   # Home page
   homeInfoParams:
     title: Bonjour! 👋
@@ -34,7 +34,7 @@ params:
           url: https://medium.com/@leovct
         - name: rss
           url: https://leovct.github.io/index.xml
-  
+
   # Posts options
   showToc: true
   showReadingTime: true
