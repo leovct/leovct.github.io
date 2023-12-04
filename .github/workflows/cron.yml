@@ -5,11 +5,20 @@ on:
   schedule:
     - cron: '0 5 * * 1' # Run every Monday at 6 AM (UTC+1) - Paris
 
+env:
+  PNPM_VERSION: '8'
+
 jobs:
   submodules-update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Update submodules
         run: pnpm run update
