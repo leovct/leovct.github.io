@@ -10,7 +10,7 @@
 <meta name="description" content="Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework">
 <meta name="author" content="leovct">
 <link rel="canonical" href="https://leovct.github.io/posts/kubernetes/build-an-operator/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.f105f67841511264ec4d93a07e145a315b7f8e68249369096fcd47acbd96f3f7.css" integrity="sha256-8QX2eEFREmTsTZOgfhRaMVt/jmgkk2kJb81HrL2W8/c=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.6d41bb846b66a3078470743106bc52281cd468e7e4beebbd0c72c2feae313e2b.css" integrity="sha256-bUG7hGtmoweEcHQxBrxSKBzUaOfkvuu9DHLC/q4xPis=" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
     onload="hljs.initHighlightingOnLoad();"></script>
 <link rel="icon" href="https://leovct.github.io/favicon.ico">
@@ -382,7 +382,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <h3 id="3-customize-the-crd-and-the-controller">3. Customize the CRD and the controller<a hidden class="anchor" aria-hidden="true" href="#3-customize-the-crd-and-the-controller">#</a></h3>
 <p>Here’s our lovely Foo CRD customised (see <code>api/v1/foo_types.go</code>). As I said previously, this CRD has no purpose. It simply shows how you can use operators to perform simple tasks in Kubernetes.</p>
 <p>The Foo CRD has a <code>name</code> field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a pod with the same name as his friend), its <code>happy</code> status will be set to <code>true</code>.</p>
-<script type="application/javascript" src="https://gist.github.com/leovct/aa3b494eafdc9bdbc2dc705936d9a451.js"></script>
+<script src="https://gist.github.com/leovct/aa3b494eafdc9bdbc2dc705936d9a451.js"></script>
 
 <p>Now, let’s implement the logic of the controller. Nothing very complicated here. We fetch the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, we list all the pods that have the same name as Foo’s friend. If we find one (or more), we update Foo’s <code>happy</code> status to <code>true</code>, else we set it to <code>false</code>.</p>
 <p>Note that the controller also reacts to Pod events (see <code>mapPodsReqToFooReq</code>). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the <code>Pod</code> is a “friend” of one of the Foo custom resources deployed in the cluster.</p>
@@ -397,7 +397,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 
 <!-- raw HTML omitted -->
 <p>And now, here is the implementation of the controller.</p>
-<script type="application/javascript" src="https://gist.github.com/leovct/24b53d11662fa7b8d14721edc3f58b0d.js"></script>
+<script src="https://gist.github.com/leovct/24b53d11662fa7b8d14721edc3f58b0d.js"></script>
 
 <p>We’re done editing the API definitions and the controller so we can run the following command to update the operator manifests. If you pay attention, you’ll see that some manifest files have been updated.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make manifests
@@ -437,7 +437,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <h3 id="5-test-the-controller">5. Test the controller<a hidden class="anchor" aria-hidden="true" href="#5-test-the-controller">#</a></h3>
 <p>To test that everything works properly, we’ll create two Foo custom resources and some pods just to see how the controller behaves. You can modify <code>config/samples/tutorial_v1_foo.yaml</code>.</p>
 <p>First, create the Foo custom resources manifests in config/samples and run the following command to create the resources in your local Kubernetes cluster.</p>
-<script type="application/javascript" src="https://gist.github.com/leovct/c41cb1ded81ac74486dd01e776545daf.js"></script>
+<script src="https://gist.github.com/leovct/c41cb1ded81ac74486dd01e776545daf.js"></script>
 
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubectl apply -k config/samples
 </span></span><span style="display:flex;"><span>foo.tutorial.my.domain/foo-1 created
@@ -492,7 +492,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 </span></span><span style="display:flex;"><span>Status:
 </span></span><span style="display:flex;"><span>Events:  &lt;none&gt;
 </span></span></code></pre></div><p>Now, let’s spice things up! We’ll deploy a pod named <code>jack</code> to see how the system reacts.</p>
-<script type="application/javascript" src="https://gist.github.com/leovct/fa9cc578ada581f0c32cff14515cc2e2.js"></script>
+<script src="https://gist.github.com/leovct/fa9cc578ada581f0c32cff14515cc2e2.js"></script>
 
 <p>Once done, you should see that the controller reacts to the pod creation event. It then updates the status of the first Foo custom resource as expected. You can verify by yourself by describing the Foo custom resources.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>2023-11-03T09:26:25+01:00       INFO    pod linked to a foo custom resource issued an event     <span style="color:#f92672">{</span><span style="color:#e6db74">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;jack&#34;</span><span style="color:#f92672">}</span>
