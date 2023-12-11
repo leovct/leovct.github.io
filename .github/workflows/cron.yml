@@ -6,7 +6,7 @@ on:
     - cron: '0 5 * * 1' # Run every Monday at 6 AM (UTC+1) - Paris
 
 env:
-  PNPM_VERSION: '8'
+  PNPM_VERSION: '8.11.0'
 
 jobs:
   submodules-update:
