@@ -21,7 +21,9 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Update submodules
-        run: pnpm run update
+        run: |
+          git config pull.rebase false
+          pnpm run update
 
       - name: Check for changes
         id: check_changes

@@ -20,7 +20,7 @@ params:
       Sometimes, I write technical articles and take part in hackathons (e.g. Chainlink Spring 2022: [Everest Protocol](https://devpost.com/software/everest-ab708o)).
       - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy, gym rat, fond of sports and football :)
     social:
-      align: left
+      align: right
       icons:
         - name: github
           url: https://github.com/leovct
