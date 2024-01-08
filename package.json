@@ -7,7 +7,7 @@
     "start": "hugo server",
     "check": "pnpm exec prettier --check .",
     "lint": "pnpm exec prettier --write .",
-    "update": "cd themes/PaperMod && git pull --ff-only"
+    "update": "git submodule update --remote"
   },
   "keywords": [],
   "author": "@leovct",
