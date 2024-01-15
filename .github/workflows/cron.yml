@@ -30,6 +30,8 @@ jobs:
             echo "✅ Changes detected!"
             echo "::set-output name=changes::true"
           else
+            echo "No changes detected."
+          fi
 
       - name: Create PR
         if: steps.check_changes.outputs.changes == 'true'
