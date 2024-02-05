@@ -29,10 +29,13 @@ jobs:
         run: |
           if [[ -n $(git status --porcelain) ]]; then
             echo "✅ Changes detected!"
-            echo "::set-output name=changes::true"
           else
             echo "No changes detected."
           fi
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
+        with:
+          branch: 'chore/update-submodules'
+          commit-message: 'chore: update submodules'
+          title: 'chore: update submodules'
