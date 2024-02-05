@@ -4,6 +4,7 @@ name: Weekly submodules update
 on:
   schedule:
     - cron: '0 5 * * 1' # Run every Monday at 6 AM (UTC+1) - Paris
+  workflow_dispatch: # To debug.
 
 env:
   PNPM_VERSION: '8.11.0'
