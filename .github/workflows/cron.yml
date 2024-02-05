@@ -4,6 +4,7 @@ name: Weekly submodules update
 on:
   schedule:
     - cron: '0 5 * * 1' # Run every Monday at 6 AM (UTC+1) - Paris
+  workflow_dispatch: # To debug.
 
 env:
   PNPM_VERSION: '8.11.0'
@@ -33,14 +34,5 @@ jobs:
             echo "No changes detected."
           fi
 
-      - name: Create PR
-        if: steps.check_changes.outputs.changes == 'true'
-        run: |
-          branch_name="submodules-update-$(date +'%Y%m%d')"
-          git checkout -b $branch_name
-          git add .
-          git commit -m "[🤖] chore: update submodules"
-          git push origin $branch_name
-          hub pull-request -m "[🤖] chore: update submodules" -b main -h $branch_name
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
