@@ -159,7 +159,7 @@ ok      my.domain/tutorial/internal/controller  16.166s coverage: 81.8% of state
 
 Nice, we’ve got no errors! In addition, we went from 0% coverage to over 82%! The last 18% corresponds to the parts of the code that we can’t test (or maybe using mocks but it would be a lot of work for not much). For example, when the controller can’t find the custom resource that triggered the reconciliation loop or when it can’t list the pods in the cluster. It doesn’t matter because we know that we have tested all the operator’s scope.
 
-Here’s the link to the [GitHub repository](https://github.com/leovct/kubernetes-operator-tutorial) if you need to browse the code. The `operator-v2` directory contains the source code of the operator without the tests, while the `operator-v2-with-tests` directory contains the source code with all the tests.
+Here’s the link to the [GitHub repository](https://github.com/leovct/kube-operator-tutorial) if you need to browse the code. The `operator-v2` directory contains the source code of the operator without the tests, while the `operator-v2-with-tests` directory contains the source code with all the tests.
 
 ## To Go Further
 

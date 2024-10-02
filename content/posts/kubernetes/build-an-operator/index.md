@@ -284,7 +284,7 @@ foo.tutorial.my.domain/foo-1 created
 foo.tutorial.my.domain/foo-2 created
 ```
 
-You should see that the controller triggered two reconciliation loops for each Foo custom resource creation event. You may wonder why two loops were triggered for each custom resource and not one, this is a more technical topic, I invite you to read this [thread](https://github.com/leovct/kubernetes-operator-tutorial/issues/2).
+You should see that the controller triggered two reconciliation loops for each Foo custom resource creation event. You may wonder why two loops were triggered for each custom resource and not one, this is a more technical topic, I invite you to read this [thread](https://github.com/leovct/kube-operator-tutorial/issues/2).
 
 ```sh
 2023-11-03T09:16:40+01:00       INFO    reconciling foo custom resource {"controller": "foo", "controllerGroup": "tutorial.my.domain", "controllerKind": "Foo", "Foo": {"name":"foo-sample","namespace":"default"}, "namespace": "default", "name": "foo-sample", "reconcileID": "c98a2469-159f-4c3f-b9bb-aa02b6dd5bf9"}
@@ -373,7 +373,7 @@ We can confirm that the operator works as expected! It would be better to write 
 
 You can be proud of yourself. You have designed, deployed, and tested your very first operator! Congratulations!!
 
-Here’s the link to the [GitHub repository](https://github.com/leovct/kubernetes-operator-tutorial) if you need to browse the code.
+Here’s the link to the [GitHub repository](https://github.com/leovct/kube-operator-tutorial) if you need to browse the code.
 
 ## To go further
 
