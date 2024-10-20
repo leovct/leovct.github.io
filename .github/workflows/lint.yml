@@ -1,4 +1,4 @@
-name: Run linter
+name: Lint
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 env:
-  PNPM_VERSION: '9.6.0' # https://www.npmjs.com/package/pnpm
+  PNPM_VERSION: '9.12.2' # https://www.npmjs.com/package/pnpm
 
 jobs:
   lint:
