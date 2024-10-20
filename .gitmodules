@@ -1,3 +1,7 @@
 [submodule "themes/PaperMod"]
 	path = themes/PaperMod
-	url = https://github.com/adityatelange/hugo-PaperMod.git
+	# Temporary fix for the social issue.
+	# https://github.com/adityatelange/hugo-PaperMod/issues/1573
+	# url = https://github.com/adityatelange/hugo-PaperMod.git
+	url = https://github.com/leovct/hugo-PaperMod.git
+	branch = fix/site-social-issue
