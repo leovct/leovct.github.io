@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
 
+env:
+  HUGO_VERSION: 'v0.136.2' # https://github.com/gohugoio/hugo/releases
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,9 +17,9 @@ jobs:
           fetch-depth: 0 # Fetch all history for `.gitinfo` and `.lastmod`.
 
       - name: Setup hugo
-        uses: peaceiris/actions-hugo@v2
+        uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: 'latest'
+          hugo-version: ${{ env.HUGO_VERSION }}
 
       - name: Build website
         run: hugo
