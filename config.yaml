@@ -1,7 +1,8 @@
 baseURL: https://leovct.github.io/
 title: leovct.dev
 theme: PaperMod
-paginate: 5
+pagination:
+  pagerSize: 5
 googleAnalytics: G-7BWGX7L5F0
 
 params:
