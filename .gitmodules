@@ -1,8 +1,4 @@
 [submodule "themes/PaperMod"]
 	path = themes/PaperMod
-	# Temporary fix for the social issue.
-	# https://github.com/adityatelange/hugo-PaperMod/issues/1573
-	# url = https://github.com/adityatelange/hugo-PaperMod.git
-	# git clone --branch fix/site-social-issue https://github.com/leovct/hugo-PaperMod.git PaperMod
-	url = https://github.com/leovct/hugo-PaperMod.git
-	branch = fix/site-social-issue
+	url = https://github.com/adityatelange/hugo-PaperMod.git
+	branch = master
