@@ -27,12 +27,8 @@ params:
           url: https://github.com/leovct
         - name: twitter
           url: https://twitter.com/leoovct
-        - name: discord
-          url: https://discordapp.com/users/leovct#7885
         - name: linkedin
           url: https://www.linkedin.com/in/vincentleo/
-        - name: medium
-          url: https://medium.com/@leovct
         - name: rss
           url: https://leovct.github.io/index.xml
 
