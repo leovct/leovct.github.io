@@ -12,14 +12,14 @@ params:
 
   # Home page
   homeInfoParams:
-    title: Bonjour! 👋
+    title: Salut ! 👋
     image:
       url: cypher-city-318-modified.png
-      title: Cypher City 318 modified
+      title: Profile picture
     content: |
-      - My name is Léo, I'm an [infrastructure software engineer](https://flexport.engineering/what-its-like-to-work-as-an-infrastructure-software-engineer-at-flexport-252267999fd9) working at [@Polygon Labs](https://twitter.com/0xPolygonLabs) to scale [Ethereum](https://ethereum.org/en/) (prev: [@Renault Software Factory](https://twitter.com/renaultgroup) and [@INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
-      Sometimes, I write technical articles and take part in hackathons (e.g. Chainlink Spring 2022: [Everest Protocol](https://devpost.com/software/everest-ab708o)).
-      - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy, gym rat, fond of sports and football :)
+      - My name is Léo. I'm a french software engineer.
+      - I currently work at [Polygon Labs](https://polygon.technology/), developing layer 2 solutions to help scaling Ethereum (prev: [platform engineer](https://github.com/resources/articles/software-development/what-is-platform-engineering) at [Renault Software Factory](https://twitter.com/renaultgroup) and student at [INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
+      - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy with a passion for crossfit, trail running, and outdoor adventures.
     social:
       align: right
       icons:
@@ -29,8 +29,6 @@ params:
           url: https://twitter.com/leoovct
         - name: linkedin
           url: https://www.linkedin.com/in/vincentleo/
-        - name: rss
-          url: https://leovct.github.io/index.xml
 
   # Posts options
   showToc: true
@@ -64,20 +62,23 @@ params:
 outputs:
   home:
     - HTML
-    - RSS
     - JSON # is necessary
 
 menu:
   main:
+    - identifier: home
+      name: home
+      url: /
+      weight: 1
+    - identifier: articles
+      name: articles
+      url: /articles/
+      weight: 2
+    - identifier: projects
+      name: projects
+      url: /projects/
+      weight: 3
     - identifier: search
       name: search
       url: /search/
-      weight: 10
-    - identifier: tags
-      name: tags
-      url: /tags/
-      weight: 20
-    - identifier: archives
-      name: archives
-      url: /archives/
-      weight: 30
+      weight: 4
