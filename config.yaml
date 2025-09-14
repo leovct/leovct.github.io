@@ -14,7 +14,7 @@ params:
   homeInfoParams:
     title: Salut ! 👋
     image:
-      url: cypher-city-318-modified.png
+      url: profile.jpg
       title: Profile picture
     content: |
       - My name is Léo. I'm a french software engineer.
