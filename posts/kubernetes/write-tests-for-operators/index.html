@@ -10,7 +10,7 @@
 <meta name="description" content="Learn how to write unit and e2e tests for Kubernetes operators">
 <meta name="author" content="leovct">
 <link rel="canonical" href="https://leovct.github.io/posts/kubernetes/write-tests-for-operators/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.7acfedb2866a4f17383d2edb9100119d91bc137e13dec4f376720ee0760c4d8e.css" integrity="sha256-es/tsoZqTxc4PS7bkQARnZG8E34T3sTzdnIO4HYMTY4=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.05e577b476f3628aca415e24cd867ec0154cc7dc933267440f69f25a4c57f47c.css" integrity="sha256-BeV3tHbzYorKQV4kzYZ&#43;wBVMx9yTMmdED2nyWkxX9Hw=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://leovct.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://leovct.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://leovct.github.io/favicon-32x32.png">
@@ -160,7 +160,7 @@
         <div class="logo">
             <a href="https://leovct.github.io/" accesskey="h" title="leovct.dev (Alt + H)">leovct.dev</a>
             <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -184,18 +184,23 @@
         </div>
         <ul id="menu">
             <li>
+                <a href="https://leovct.github.io/" title="home">
+                    <span>home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://leovct.github.io/articles/" title="articles">
+                    <span>articles</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://leovct.github.io/projects/" title="projects">
+                    <span>projects</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://leovct.github.io/search/" title="search (Alt &#43; /)" accesskey=/>
                     <span>search</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://leovct.github.io/tags/" title="tags">
-                    <span>tags</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://leovct.github.io/archives/" title="archives">
-                    <span>archives</span>
                 </a>
             </li>
         </ul>
@@ -212,15 +217,18 @@
     <div class="post-description">
       Learn how to write unit and e2e tests for Kubernetes operators
     </div>
-    <div class="post-meta"><span title='2022-08-01 00:00:00 +0000 UTC'>August 1, 2022</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;1861 words&nbsp;·&nbsp;leovct&nbsp;|&nbsp;<a href="https://github.com/leovct/leovct.github.io/tree/main/content//posts/kubernetes/write-tests-for-operators/index.md" rel="noopener noreferrer" target="_blank">📝 Suggest changes</a>
+    <div class="post-meta"><span title='2022-08-01 00:00:00 +0000 UTC'>August 1, 2022</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;1861 words&nbsp;·&nbsp;leovct&nbsp;|&nbsp;<a href="https://github.com/leovct/leovct.github.io/tree/main/content//posts/kubernetes/write-tests-for-operators/index.md" rel="noopener noreferrer edit" target="_blank">📝 Suggest changes</a>
 
 </div>
   </header> 
 <figure class="entry-cover">
-        <img loading="eager" srcset="https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu15444442444457291265.png 360w ,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu7510246389329642493.png 480w ,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu4197137597047579377.png 720w ,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu12189362723075763446.png 1080w ,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu17999037408053281693.png 1500w ,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover.png 1920w" 
-            sizes="(min-width: 768px) 720px, 100vw" src="https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover.png" alt="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)" 
-            width="1920" height="1280">
-        <p>Fig 1. Photo from <a href="https://unsplash.com/photos/aYHzEnSEH-w">Unsplash</a></p>
+            <img loading="eager"
+                srcset='https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu_3f6102b3807d2e25.png 360w,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu_4708a362a66fdcc7.png 480w,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu_af687fe6f6935da3.png 720w,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu_630cab52399f06cd.png 1080w,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover_hu_ca5da85ec407138e.png 1500w,https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover.png 1920w'
+                src="https://leovct.github.io/posts/kubernetes/write-tests-for-operators/fig-1-cover.png"
+                sizes="(min-width: 768px) 720px, 100vw"
+                width="1920" height="1280"
+                alt="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)">
+        <figcaption>Fig 1. Photo from <a href="https://unsplash.com/photos/aYHzEnSEH-w">Unsplash</a></figcaption>
 </figure><div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
@@ -255,8 +263,7 @@
 <p>In my previous <a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/">article</a>, I showed how to build a Kubernetes operator in about ten minutes - but you must be quick haha! I’ve also described the functioning of an operator, the custom resource definition and custom resources, the controllers, and the manager. If you want to learn more about these concepts, I highly recommend you read the article.</p>
 <p>But now it’s time to write some tests to use our operator in production! It’s a subject in its own right that is less complicated than it seems. Most people don’t like writing tests, but they are necessary. They help to improve code quality, detect bugs, and save time and money. So, let’s do some testing!</p>
 <blockquote>
-<p><strong>✨ The article was updated to use the latest version of kubebuilder (<a href="https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v4.2.0">v4.2.0</a>), released in August 2024!</strong></p>
-</blockquote>
+<p><strong>✨ The article was updated to use the latest version of kubebuilder (<a href="https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v4.2.0">v4.2.0</a>), released in August 2024!</strong></p></blockquote>
 <h2 id="the-different-types-of-tests">The Different Types of Tests<a hidden class="anchor" aria-hidden="true" href="#the-different-types-of-tests">#</a></h2>
 <p>There are three major types of testing in software development: unit, integration, and end-to-end testing. It is even more complex than that in theory, but it gives an idea of what we’ll see in this article.</p>
 <ul>
@@ -283,7 +290,6 @@
 <p>The “Foo” operator you cloned is similar to the one I built in my “<a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/">Build a Kubernetes Operator in 10 minutes</a>” article. It has no real purpose except to show how you can use operators to perform simple tasks in Kubernetes.</p>
 <p>How does the operator work?</p>
 <p>Because a diagram explains ideas way better than three paragraphs, here it is.</p>
-<!-- raw HTML omitted -->
 <figure class="align-center ">
     <img loading="lazy" src="fig-2-foo-operator-overview.svg#center"
          alt="Fig 2. Overview of the operator&rsquo;s functioning" width="700" height="400"/> <figcaption>
@@ -291,7 +297,6 @@
         </figcaption>
 </figure>
 
-<!-- raw HTML omitted -->
 <p>First, there is the Foo Custom Resource Definition or CRD (see <code>api/v1/foo_types.go</code>). It has a <code>name</code> field in its specification which refers to the name of the friend Foo is looking for. If Foo finds a friend (a Pod with the same name as his friend), its <code>happy</code> status will be set to <code>true</code>. A small addition since the previous tutorial, the status of Foo also contains a <code>color</code> field, determined according to its name and the namespace in which it evolves.</p>
 <p>Second, there is the Foo Controller (see <code>controllers/foo_controller.go</code>). It fetches the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, it lists all the pods with the same name as Foo’s friend. If at least one friend has been found, it updates Foo’s <code>happy</code> status to <code>true</code>, else we set it to <code>false</code>. It also updates Foo’s <code>color</code> status.</p>
 <p>Note that the controller also reacts to Pod events (see <code>mapPodsReqToFooReq</code>). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the Pod&rsquo;s name is a “friend” of one of the Foo custom resources deployed in the cluster.</p>

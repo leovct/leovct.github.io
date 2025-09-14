@@ -10,7 +10,7 @@
 <meta name="description" content="Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework">
 <meta name="author" content="leovct">
 <link rel="canonical" href="https://leovct.github.io/posts/kubernetes/build-an-operator/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.7acfedb2866a4f17383d2edb9100119d91bc137e13dec4f376720ee0760c4d8e.css" integrity="sha256-es/tsoZqTxc4PS7bkQARnZG8E34T3sTzdnIO4HYMTY4=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.05e577b476f3628aca415e24cd867ec0154cc7dc933267440f69f25a4c57f47c.css" integrity="sha256-BeV3tHbzYorKQV4kzYZ&#43;wBVMx9yTMmdED2nyWkxX9Hw=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://leovct.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://leovct.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://leovct.github.io/favicon-32x32.png">
@@ -160,7 +160,7 @@
         <div class="logo">
             <a href="https://leovct.github.io/" accesskey="h" title="leovct.dev (Alt + H)">leovct.dev</a>
             <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -184,18 +184,23 @@
         </div>
         <ul id="menu">
             <li>
+                <a href="https://leovct.github.io/" title="home">
+                    <span>home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://leovct.github.io/articles/" title="articles">
+                    <span>articles</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://leovct.github.io/projects/" title="projects">
+                    <span>projects</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://leovct.github.io/search/" title="search (Alt &#43; /)" accesskey=/>
                     <span>search</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://leovct.github.io/tags/" title="tags">
-                    <span>tags</span>
-                </a>
-            </li>
-            <li>
-                <a href="https://leovct.github.io/archives/" title="archives">
-                    <span>archives</span>
                 </a>
             </li>
         </ul>
@@ -212,15 +217,18 @@
     <div class="post-description">
       Learn how Kubernetes operators work and how to build one using go and the kubebuilder framework
     </div>
-    <div class="post-meta"><span title='2022-07-07 00:00:00 +0000 UTC'>July 7, 2022</span>&nbsp;·&nbsp;14 min&nbsp;·&nbsp;2782 words&nbsp;·&nbsp;leovct&nbsp;|&nbsp;<a href="https://github.com/leovct/leovct.github.io/tree/main/content//posts/kubernetes/build-an-operator/index.md" rel="noopener noreferrer" target="_blank">📝 Suggest changes</a>
+    <div class="post-meta"><span title='2022-07-07 00:00:00 +0000 UTC'>July 7, 2022</span>&nbsp;·&nbsp;14 min&nbsp;·&nbsp;2782 words&nbsp;·&nbsp;leovct&nbsp;|&nbsp;<a href="https://github.com/leovct/leovct.github.io/tree/main/content//posts/kubernetes/build-an-operator/index.md" rel="noopener noreferrer edit" target="_blank">📝 Suggest changes</a>
 
 </div>
   </header> 
 <figure class="entry-cover">
-        <img loading="eager" srcset="https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu16869250457053676644.png 360w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu17204551251850096389.png 480w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu1722034529551393850.png 720w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu1045507173924450210.png 1080w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu2991846696315591238.png 1500w ,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png 1920w" 
-            sizes="(min-width: 768px) 720px, 100vw" src="https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png" alt="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)" 
-            width="1920" height="1282">
-        <p>Fig 1. Photo from <a href="https://unsplash.com/photos/Esq0ovRY-Zs">Unsplash</a></p>
+            <img loading="eager"
+                srcset='https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_1850f097c1fea4e9.png 360w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_313be8c358a3dd51.png 480w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_b85dc893dc8242ea.png 720w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_2b8e2fb268080606.png 1080w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_e2e7721a357ccfea.png 1500w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png 1920w'
+                src="https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png"
+                sizes="(min-width: 768px) 720px, 100vw"
+                width="1920" height="1282"
+                alt="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)">
+        <figcaption>Fig 1. Photo from <a href="https://unsplash.com/photos/Esq0ovRY-Zs">Unsplash</a></figcaption>
 </figure><div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
@@ -257,17 +265,14 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p>Kubernetes operators is a complicated subject but fortunately, since <a href="https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html">their creation</a> in 2016, many tools have been developed to simplify the life of engineers.</p>
 <p>Without further ado, let’s dive in and learn more about operators!</p>
 <blockquote>
-<p><strong>✨ The article was updated to use the latest version of kubebuilder (<a href="https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v4.2.0">v4.2.0</a>), released in August 2024!</strong></p>
-</blockquote>
+<p><strong>✨ The article was updated to use the latest version of kubebuilder (<a href="https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v4.2.0">v4.2.0</a>), released in August 2024!</strong></p></blockquote>
 <blockquote>
-<p><strong>tl;dr</strong> Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it&rsquo;s highly recommended to use a framework like <a href="https://book.kubebuilder.io/">Kubebuilder</a> or <a href="https://sdk.operatorframework.io/">OperatorSDK</a>, as shown in this article.</p>
-</blockquote>
+<p><strong>tl;dr</strong> Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it&rsquo;s highly recommended to use a framework like <a href="https://book.kubebuilder.io/">Kubebuilder</a> or <a href="https://sdk.operatorframework.io/">OperatorSDK</a>, as shown in this article.</p></blockquote>
 <h2 id="what-is-an-operator">What is an operator?<a hidden class="anchor" aria-hidden="true" href="#what-is-an-operator">#</a></h2>
 <p>Wait a minute, do you know what <a href="https://kubernetes.io/">Kubernetes</a> (or k8s) is? Just a quick reminder for everyone, it’s an “open source system to deploy, scale, and manage containerized applications anywhere” developed by <a href="https://cloud.google.com/learn/what-is-kubernetes">Google Cloud</a>.</p>
 <p>Most people use Kubernetes by deploying their applications using native resources such as pods, deployments, services, etc. However, it is possible to extend the capabilities of the software to incorporate its logic to meet specific needs. That’s where the operator comes into place.</p>
 <blockquote>
-<p>The main goal of an operator is to translate an engineer’s logic into code in order to automate certain tasks beyond what Kubernetes can do natively.</p>
-</blockquote>
+<p>The main goal of an operator is to translate an engineer’s logic into code in order to automate certain tasks beyond what Kubernetes can do natively.</p></blockquote>
 <p>Engineers dealing with applications or services have a deep knowledge of how the system should behave, how it should be deployed, and how to react in case of a problem. The ability to encapsulate this technical knowledge in code and automate actions means less time is spent on repetitive tasks and more on important issues.</p>
 <p>For example, one can imagine an operator deploying and maintaining tools such as <a href="https://www.mysql.com/">MySQL</a>, <a href="https://www.elastic.co/">Elasticsearch</a>, or <a href="https://docs.gitlab.com/runner/">Gitlab runners</a> in Kubernetes. An operator could configure these tools, adjust the state of the system according to events and react to failures.</p>
 <p>Sounds interesting, right? Let’s get our hands dirty.</p>
@@ -335,10 +340,8 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p><strong>Wait, what’s this controller component?!</strong></p>
 <p>This is going to be a bit theoretical. Hang on!</p>
 <blockquote>
-<p>An operator is made of two components, a custom resource definition (CRD) and a controller.</p>
-</blockquote>
+<p>An operator is made of two components, a custom resource definition (CRD) and a controller.</p></blockquote>
 <p>A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to describe its specification and status. We can define instances of the CRD, called custom resources (or CR).</p>
-<!-- raw HTML omitted -->
 <figure class="align-center ">
     <img loading="lazy" src="fig-2-crd-cr.svg#center"
          alt="Fig 2. Custom Resource Definition (CRD) and Custom Resources (CR)" width="700" height="400"/> <figcaption>
@@ -346,9 +349,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
         </figcaption>
 </figure>
 
-<!-- raw HTML omitted -->
 <p>The controller (also called the control loop) continuously monitors the state of the cluster and, depending on events, makes changes. Its goal is to bring the current state of a resource towards its desired state, defined by the user in the specification of the custom resource.</p>
-<!-- raw HTML omitted -->
 <figure class="align-center ">
     <img loading="lazy" src="fig-3-controller.svg#center"
          alt="Fig 3. High-level operation of a controller by Stefanie Lai" width="1000" height="200"/> <figcaption>
@@ -356,7 +357,6 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
         </figcaption>
 </figure>
 
-<!-- raw HTML omitted -->
 <p>In general, a controller is specific to a type of resource but it can perform CRUD (Create, Read, Update and Delete) operations on a set of different resources.</p>
 <p>An example of a controller, presented in the Kubernetes documentation, is the thermostat. When we set the temperature, we tell the thermostat the desired state. The actual state is determined by the actual temperature of the room. The thermostat then reacts to bring the actual state closer to the desired state by turning the heat on or off.</p>
 <p>What about the manager then? The goal of this component is to start all the various controllers and makes the set of control loops coexist. Let’s say you have two CRDs in your project. You’ll then have two controllers: one for each CRD. The manager will start these two controllers and make them coexist.</p>
@@ -394,7 +394,6 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p>Now, let’s implement the logic of the controller. Nothing very complicated here. We fetch the Foo resource that triggered the reconciliation request to get the name of Foo’s friend. Then, we list all the pods that have the same name as Foo’s friend. If we find one (or more), we update Foo’s <code>happy</code> status to <code>true</code>, else we set it to <code>false</code>.</p>
 <p>Note that the controller also reacts to Pod events (see <code>mapPodsReqToFooReq</code>). Indeed, if a new pod is created, we want the Foo resource to be able to update its status accordingly. This method will be triggered each time a Pod event happens (creation, update, or deletion). It then triggers a reconciliation loop of the Foo controller only if the name of the <code>Pod</code> is a “friend” of one of the Foo custom resources deployed in the cluster.</p>
 <p>A picture is worth more than 1000 words so here is an overview of how the operator works.</p>
-<!-- raw HTML omitted -->
 <figure class="align-center ">
     <img loading="lazy" src="fig-4-foo-operator-overview.svg#center"
          alt="Fig 4. Overview of the operator&rsquo;s functioning" width="700" height="400"/> <figcaption>
@@ -402,7 +401,6 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
         </figcaption>
 </figure>
 
-<!-- raw HTML omitted -->
 <p>And now, here is the implementation of the controller.</p>
 <script src="https://gist.github.com/leovct/24b53d11662fa7b8d14721edc3f58b0d.js"></script>
 
