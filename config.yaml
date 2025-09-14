@@ -15,7 +15,7 @@ params:
     title: Salut ! 👋
     image:
       url: cypher-city-318-modified.png
-      title: Cypher City 318 modified
+      title: Profile picture
     content: |
       - My name is Léo. I'm a french software engineer.
       - I currently work at [Polygon Labs](https://polygon.technology/), developing layer 2 solutions to help scaling Ethereum (prev: [platform engineer](https://github.com/resources/articles/software-development/what-is-platform-engineering) at [Renault Software Factory](https://twitter.com/renaultgroup) and student at [INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
