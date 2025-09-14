@@ -26,11 +26,11 @@ Some of the projects I have been working on lately, ranging from blockchain infr
 
 ## 2021-22
 
-### ☸️ Kubernetes Custom Operators
+### ☸️ Kubernetes Operators
 
 - Designed and implemented a Kubernetes operator to standardize configurations and automate deployments and updates of GitLab runners
 - Production deployment supervising 50+ runners, running 24/7 and executing thousands of jobs weekly
-- Authored technical articles on building and testing Kubernetes custom operators
+- Wrote technical articles on building and testing Kubernetes operators
 
 ### 👀 Monitoring
 
@@ -39,7 +39,7 @@ Some of the projects I have been working on lately, ranging from blockchain infr
 
 ### 🌸 Chainlink Spring Hackathon
 
-- [Everest Protocol](https://devpost.com/software/everest-ab708o): Attempted to build a decentralized protocol for trading synthetic assets - crypto following traditional asset prices like $TSLA with two other crypto nerds (cc [@yvesbou](https://x.com/boutellier_yves))
+- [Everest Protocol](https://devpost.com/software/everest-ab708o): Attempted to build a DeFi protocol for trading synthetic assets (crypto following traditional asset prices like $TSLA) with two other crypto nerds (cc [@yvesbou](https://x.com/boutellier_yves))
 - Top 40 out of 400+ projects and 1,500+ participants
 - Based on Chainlink oracles and Uniswap
 - Deployed on Avalanche Fuji testnet
