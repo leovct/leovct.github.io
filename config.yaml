@@ -18,7 +18,7 @@ params:
       title: Profile picture
     content: |
       - My name is Léo. I'm a french software engineer.
-      - I currently work at [Polygon Labs](https://polygon.technology/), developing layer 2 solutions to help scaling Ethereum (prev: [platform engineer](https://github.com/resources/articles/software-development/what-is-platform-engineering) at [Renault Software Factory](https://twitter.com/renaultgroup) and student at [INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
+      - I currently work at [Polygon Labs](https://polygon.technology/), developing tooling for Ethereum scaling solutions (prev: [platform engineer](https://github.com/resources/articles/software-development/what-is-platform-engineering) at [Renault Software Factory](https://twitter.com/renaultgroup) and student at [INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
       - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy with a passion for crossfit, trail running, and outdoor adventures.
     social:
       align: right
