@@ -6,7 +6,7 @@ summary: projects
 
 Some of the projects I have been working on lately, ranging from blockchain infrastructure to developer tooling and kubernetes stuff.
 
-## 2023-24
+## 2023-25
 
 ### 📦 Kurtosis Packages
 
@@ -24,7 +24,7 @@ Some of the projects I have been working on lately, ranging from blockchain infr
 - [paradigmxyz/reth](https://github.com/paradigmxyz/reth): Rust execution layer implementation of the Ethereum protocol
 - [mds1/evm-diff](https://github.com/mds1/evm-diff): Web UI to differentiate EVM-compatible chains
 
-## 2020-22
+## 2021-22
 
 ### ☸️ Kubernetes Custom Operators
 
