@@ -1,7 +1,7 @@
 ---
 author: leovct
 title: 📦 Packaging blockchain infrastructure with Kurtosis
-description: A look at how Kurtosis simplifies spinning up L2 blockchain stacks like Polygon CDK and PoS
+description: A look at how Kurtosis simplifies spinning up L2 blockchain stacks like Polygon CDK
 date: 2025-09-15
 tags:
   - blockchain
