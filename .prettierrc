@@ -5,8 +5,6 @@ semi: false
 singleQuote: true
 trailingComma: es5
 
-# Fix to parse markdown with JSX expressions.
-
 # Fix to parse html hugo templates.
 plugins:
   - prettier-plugin-go-template
