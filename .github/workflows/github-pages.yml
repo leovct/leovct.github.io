@@ -1,4 +1,4 @@
-name: Deploy to Github
+name: github-pages
 
 on:
   push:
@@ -11,13 +11,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: true # Fetch Hugo themes (true or recursive).
           fetch-depth: 0 # Fetch all history for `.gitinfo` and `.lastmod`.
 
-      - name: Setup hugo
-        uses: peaceiris/actions-hugo@v3
+      - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: ${{ env.HUGO_VERSION }}
 
