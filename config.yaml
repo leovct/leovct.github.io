@@ -1,4 +1,4 @@
-baseURL: https://leovct.github.io/
+baseURL: https://leovct.github.io
 title: leovct.dev
 theme: PaperMod
 pagination:
@@ -18,7 +18,7 @@ params:
       title: Nina miaougénieur 🐱 (best coding assistant >> ai)
     content: |
       - My name is Léo. I'm a french software engineer.
-      - I currently work at [Polygon Labs](https://polygon.technology/), developing tooling for Ethereum scaling solutions (prev: [platform engineer](https://github.com/resources/articles/software-development/what-is-platform-engineering) at [Renault Software Factory](https://twitter.com/renaultgroup) and student at [INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
+      - I currently work at [Polygon Labs](https://polygon.technology), developing tooling for Ethereum scaling solutions (prev: [platform engineer](https://github.com/resources/articles/software-development/what-is-platform-engineering) at [Renault Software Factory](https://twitter.com/renaultgroup) and student at [INP ENSEEIHT](https://www.enseeiht.fr/en/enseeiht.html)).
       - I'm very interested in blockchain technologies and web3 security at the moment. Other than that, I'm just a random baguette guy with a passion for crossfit, trail running, and outdoor adventures.
     social:
       align: right
@@ -28,7 +28,7 @@ params:
         - name: twitter
           url: https://twitter.com/leoovct
         - name: linkedin
-          url: https://www.linkedin.com/in/vincentleo/
+          url: https://www.linkedin.com/in/vincentleo
 
   # Posts options
   showToc: true
@@ -39,7 +39,7 @@ params:
     hidden: true
     hiddenInSingle: false
   editPost:
-    URL: https://github.com/leovct/leovct.github.io/tree/main/content/
+    URL: https://github.com/leovct/leovct.github.io/tree/main/content
     Text: 📝 Suggest changes
     appendFilePath: true
 
@@ -72,13 +72,13 @@ menu:
       weight: 1
     - identifier: articles
       name: articles
-      url: /articles/
+      url: /articles
       weight: 2
     - identifier: projects
       name: projects
-      url: /projects/
+      url: /projects
       weight: 3
     - identifier: search
       name: search
-      url: /search/
+      url: /search
       weight: 4
