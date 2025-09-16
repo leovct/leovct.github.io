@@ -9,31 +9,31 @@ tags:
   - polygon
   - kurtosis
 cover:
-  image: fig-1-cover.jpg
+  image: fig-1-cover.png
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/a-brown-paper-bag-with-a-smile-drawn-on-it-0auL0z5579o)
 ---
 
 If you've ever built on Ethereum, chances are you've used tools like [Anvil](https://github.com/foundry-rs/foundry) and [Hardhat](https://github.com/NomicFoundation/hardhat) to spin up local blockchain nodes. Simple, fast, effective, and usually enough for most projects.
 
-But what happens when your use case gets more complex? How do you test multi-chain interactions between Ethereum and different L2s? Or see how your system behaves against a specific rollup stack? What if a change in a protocol could affect your system? How do you safely test that? Public testnets are a great option, but they can be slow, costly, missing certain protocols or infrastructure components and, as the name suggests, they're not private.
+But what happens when your use case gets more complex? How do you test multi-chain interactions between Ethereum and different L2s? How do you test your system's behavior against a specific rollup stack? What if a change in a protocol could affect your system? How do you safely test that?
 
-So now you’re hacking your way through [Docker Compose](https://github.com/docker/compose), [Ansible](https://github.com/ansible/ansible) or [Helm](https://github.com/helm/helm) charts. Trying to get execution and consensus clients running for your local blockchain stack. Configuring all these services is tricky, but eventually, you manage to get an L1 up and running. It’s messy, complicated, and a nightmare to maintain - but hey, it works.
+Public testnets are a great option, but they can be slow, costly, missing certain protocols or infrastructure components and, as the name suggests, they're not private.
 
-Great! Now do the same for the rollup stack. Suddenly, you’re looking at a dozen services and fifteen smart contracts that must be deployed in a precise order… And the nightmare only grows from there. One small mistake and nothing works: batches fail to create, the prover can’t prove blocks, or batches aren’t settled on L1. So many ways to mess up… Oh, and did I mention? Nothing is documented.
+Now you’re hacking your way through [Docker Compose](https://github.com/docker/compose), [Ansible](https://github.com/ansible/ansible) or [Helm](https://github.com/helm/helm) charts. Trying to get execution and consensus clients running for your local blockchain stack. Configuring all these services is tricky, but eventually, you manage to get an L1 up and running. It’s messy, complicated, and a nightmare to maintain - but hey, it works.
 
-Everything’s fine, right? Right? :)
+Great! Now do the same for the rollup stack. Suddenly, you’re looking at a dozen services and fifteen smart contracts that must be deployed in a precise order… And the nightmare only grows from there. One small mistake and nothing works: batches fail to create, the prover can’t prove blocks, or batches aren’t settled on L1. So many ways to mess up… Oh, and did I mention? _Nothing is documented_.
 
 <!-- prettier-ignore-start -->
 {{< figure
-  src="fig-2-this-is-fine-meme.jpg"
-  caption="Fig 2. This is fine meme"
+  src="fig-2-side-eyeing-chloe-meme.png"
+  caption="Fig 2. Side eyeing chloe meme"
   height="400"
   width="700"
   align="center"
 >}}
 <!-- prettier-ignore-end -->
 
-Fortunately, some brilliant engineers (not to say giga chads) went through this pain before us and decided to make our lives a little easier. They built a framework that lets you define your infrastructure as real code. [Starlark](https://github.com/bazelbuild/starlark), a subset of Python, not some YAML configuration. You can define services sequentially, reuse the IP of one service in the next, add conditional logic to deploy components based on user configuration, and more. That’s the power and promise of [Kurtosis](https://github.com/kurtosis-tech/kurtosis). It simplifies packaging distributed system stacks and makes running them on Docker or Kubernetes, even in CI, effortless.
+Fortunately, some brilliant engineers (not to say giga chads) went through this pain before us and decided to make our lives a little easier. They built a framework that lets you define your infrastructure as real code. [Starlark](https://github.com/bazelbuild/starlark), a subset of Python, not some YAML configuration. You can define services sequentially, add conditional logic to deploy components, customise configurations based on user input, and more. That’s the power and promise of [Kurtosis](https://github.com/kurtosis-tech/kurtosis). It simplifies packaging distributed system stacks and makes running them on Docker or Kubernetes effortless.
 
 Feeling hyped? Let’s see how to get full L2 local devnets running in just a few minutes.
 
