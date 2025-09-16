@@ -54,12 +54,14 @@ Feeling hyped? Let’s see how to get full L2 local devnets running in just a fe
 ## Conclusion
 
 - Key takeaways / lessons learned
+
   - Pros of Kurtosis: speed, reproducibility, and easy experimentation with complex L1+L2 stacks.
   - Cons / Tradeoffs: complexity creep, occasional maintenance overhead, not usable in production, bugs and lacking some features (e.g. restarting an enclave).
   - Surprises: adoption internally and in the community—what worked, what didn’t, and how developers reacted.
   - Reflection: “Infrastructure as Code” is becoming as important as protocol R&D; managing complex stacks reliably is no longer optional.
 
 - The Bigger Picture
+
   - For Polygon engineers: faster iteration and safer testing of CDK rollups.
   - For external developers: easier onboarding, local experimentation, and fewer blockers.
   - For researchers/validators: a reproducible sandbox for testing protocol upgrades safely.
