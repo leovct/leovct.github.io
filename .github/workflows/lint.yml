@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 env:
-  PNPM_VERSION: "10.16.1" # https://www.npmjs.com/package/pnpm
+  PNPM_VERSION: '10.16.1' # https://www.npmjs.com/package/pnpm
 
 jobs:
   lint:

@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 env:
-  HUGO_VERSION: "0.150.0" # https://github.com/gohugoio/hugo/releases
+  HUGO_VERSION: '0.150.0' # https://github.com/gohugoio/hugo/releases
 
 jobs:
   build:
