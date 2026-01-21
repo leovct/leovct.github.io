@@ -13,6 +13,8 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/a-brown-paper-bag-with-a-smile-drawn-on-it-0auL0z5579o)
 ---
 
+## Introduction
+
 If you've ever built on Ethereum, chances are you've used tools like [Anvil](https://github.com/foundry-rs/foundry) and [Hardhat](https://github.com/NomicFoundation/hardhat) to spin up local blockchain nodes. Simple, fast, effective, and usually enough for most projects.
 
 But what happens when your use case gets more complex? How do you test multi-chain interactions between Ethereum and different L2s? How do you test your system's behavior against a specific rollup stack? What if a change in a protocol could affect your system? How do you safely test that?
@@ -37,13 +39,67 @@ Fortunately, some brilliant engineers (not to say giga chads) went through this 
 
 Feeling hyped? Let’s see how to get full L2 local devnets running in just a few minutes.
 
-## Concrete Example
+> As amazing as it seems, **Kurtosis isn’t meant for production use**. You’ll still need your reliable Helm charts or YAML specs for your production infrastructure. But for short-lived environments, especially testing, Kurtosis can be an incredibly useful tool!
 
-- Spin up kurtosis-cdk (ethereum l1 + l2 stack built on top of op-geth)
-- Include commands and snippets to show how services are defined sequentially
-- Show small test interaction (e.g. send a tx on L2)
-- Show how long it takes and say that's it's not fully optimised yet
-- Introduce a brief diagram of the whole stack and how it works (2/3 paragraphs max) to show the complexity
+## Try It Yourself
+
+### Prerequisites
+
+To follow along with the rest of this article, you’ll need a couple of tools:
+
+- [Docker](https://docs.docker.com/get-started/get-docker/)
+- [Kurtosis](https://docs.kurtosis.com/install)
+
+### Deploy the stack
+
+Once installed, spinning up a full Polygon CDK local devnet is as simple as running:
+
+```bash
+kurtosis run --enclave cdk github.com/0xPolygon/kurtosis-cdk
+```
+
+The first run will take several minutes as Kurtosis needs to download more than a dozen docker images before deploying the rollup stack.
+
+Once deployment completes, you can inspect what's running:
+
+```bash
+kurtosis enclave inspect cdk
+```
+
+This will give you a local dev environment, including:
+
+- L1 blockchain: geth + lighthouse
+- Agglayer node and its prover
+- L2 Polygon CDK stack: aggkit on top of the op-stack (op-node, op-geth, op-batcher, op-proposer)
+- Bridge service connecting L1 and L2
+
+TODO: Add a diagram to explain the architecture
+
+### Send a test transaction
+
+Now let's interact with our shiny new L2!
+
+First, we need to find the rpc endpoint:
+
+```bash
+export ETH_RPC_URL=$(kurtosis port print cdk op-el-1-op-geth-op-node-001 rpc)
+echo $ETH_RPC_URL
+```
+
+The package automatically creates a pre-funded admin account on L1 and L2. Let's check its balance:
+
+```bash
+pk="0x12d7de8621a77640c9241b2595ba78ce443d05e94090365ab3bb5e19df82c625"
+cast balance --ether $(cast wallet address --private-key $pk)
+```
+
+Now let's send a transaction to verify everything works:
+
+```bash
+cast send --private-key $pk --value 0.01ether $(cast address-zero)
+```
+
+You should see a transaction hash confirming your transaction was processed.
 
 ## Dive into Theory
 

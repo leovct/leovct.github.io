@@ -12,6 +12,8 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/Esq0ovRY-Zs)
 ---
 
+## Introduction
+
 You’re probably familiar with Kubernetes, but do you know what operators are, how they work, and how to build one?
 If you want to know more, you've come to the right place!
 

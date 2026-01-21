@@ -12,6 +12,8 @@ cover:
   caption: Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)
 ---
 
+## Introduction
+
 You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!
 
 Let's write some tests to use our operator in production!
