@@ -8,6 +8,7 @@ Clone the project.
 
 ```bash
 git clone git@github.com:leovct/leovct.github.io.git
+git submodule update --init --recursive
 ```
 
 Install dependencies.
