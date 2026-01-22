@@ -59,7 +59,7 @@
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-7BWGX7L5F0"></script>
       <script>
         var doNotTrack = false;
-        if ( false ) {
+        if ( true ) {
           var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
           var doNotTrack = (dnt == "1" || dnt == "yes");
         }
@@ -223,7 +223,7 @@
   </header> 
 <figure class="entry-cover">
             <img loading="eager"
-                srcset='https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_1850f097c1fea4e9.png 360w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_313be8c358a3dd51.png 480w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_b85dc893dc8242ea.png 720w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_2b8e2fb268080606.png 1080w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_e2e7721a357ccfea.png 1500w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png 1920w'
+                srcset='https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_befaade7a866eb41.png 360w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_eddd30f0c8e3e07a.png 480w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_a691d8357bf721f7.png 720w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_9e1bb0c108496d0.png 1080w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover_hu_cfd37a81ae09058b.png 1500w,https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png 1920w'
                 src="https://leovct.github.io/posts/kubernetes/build-an-operator/fig-1-cover.png"
                 sizes="(min-width: 768px) 720px, 100vw"
                 width="1920" height="1282"
@@ -265,14 +265,17 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p>Kubernetes operators is a complicated subject but fortunately, since <a href="https://web.archive.org/web/20170129131616/https://coreos.com/blog/introducing-operators.html">their creation</a> in 2016, many tools have been developed to simplify the life of engineers.</p>
 <p>Without further ado, let’s dive in and learn more about operators!</p>
 <blockquote>
-<p><strong>✨ The article was updated to use the latest version of kubebuilder (<a href="https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v4.2.0">v4.2.0</a>), released in August 2024!</strong></p></blockquote>
+<p><strong>✨ The article was updated to use the latest version of kubebuilder (<a href="https://github.com/kubernetes-sigs/kubebuilder/releases/tag/v4.2.0">v4.2.0</a>), released in August 2024!</strong></p>
+</blockquote>
 <blockquote>
-<p><strong>tl;dr</strong> Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it&rsquo;s highly recommended to use a framework like <a href="https://book.kubebuilder.io/">Kubebuilder</a> or <a href="https://sdk.operatorframework.io/">OperatorSDK</a>, as shown in this article.</p></blockquote>
+<p><strong>tl;dr</strong> Kubernetes operators allow to incorporate custom logic into Kubernetes to automate a large number of tasks, beyond what the software can do natively. While one could build an operator from scratch, it&rsquo;s highly recommended to use a framework like <a href="https://book.kubebuilder.io/">Kubebuilder</a> or <a href="https://sdk.operatorframework.io/">OperatorSDK</a>, as shown in this article.</p>
+</blockquote>
 <h2 id="what-is-an-operator">What is an operator?<a hidden class="anchor" aria-hidden="true" href="#what-is-an-operator">#</a></h2>
 <p>Wait a minute, do you know what <a href="https://kubernetes.io/">Kubernetes</a> (or k8s) is? Just a quick reminder for everyone, it’s an “open source system to deploy, scale, and manage containerized applications anywhere” developed by <a href="https://cloud.google.com/learn/what-is-kubernetes">Google Cloud</a>.</p>
 <p>Most people use Kubernetes by deploying their applications using native resources such as pods, deployments, services, etc. However, it is possible to extend the capabilities of the software to incorporate its logic to meet specific needs. That’s where the operator comes into place.</p>
 <blockquote>
-<p>The main goal of an operator is to translate an engineer’s logic into code in order to automate certain tasks beyond what Kubernetes can do natively.</p></blockquote>
+<p>The main goal of an operator is to translate an engineer’s logic into code in order to automate certain tasks beyond what Kubernetes can do natively.</p>
+</blockquote>
 <p>Engineers dealing with applications or services have a deep knowledge of how the system should behave, how it should be deployed, and how to react in case of a problem. The ability to encapsulate this technical knowledge in code and automate actions means less time is spent on repetitive tasks and more on important issues.</p>
 <p>For example, one can imagine an operator deploying and maintaining tools such as <a href="https://www.mysql.com/">MySQL</a>, <a href="https://www.elastic.co/">Elasticsearch</a>, or <a href="https://docs.gitlab.com/runner/">Gitlab runners</a> in Kubernetes. An operator could configure these tools, adjust the state of the system according to events and react to failures.</p>
 <p>Sounds interesting, right? Let’s get our hands dirty.</p>
@@ -288,9 +291,9 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p>You&rsquo;ll also need access to a Kubernetes v1.11.3+ cluster. I highly suggest using <a href="https://kind.sigs.k8s.io/">kind</a> to set up your own local k8s cluster, it’s very easy to use!</p>
 <p>We can then install kubebuilder.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ curl -L -o kubebuilder <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    kuhttps://go.kubebuilder.io/dl/latest/<span style="color:#66d9ef">$(</span>go env GOOS<span style="color:#66d9ef">)</span>/<span style="color:#66d9ef">$(</span>go env GOARCH<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> chmod +x kubebuilder <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#f92672">&amp;&amp;</span> mv kubebuilder /usr/local/bin/
+</span></span></span><span style="display:flex;"><span>    kuhttps://go.kubebuilder.io/dl/latest/<span style="color:#66d9ef">$(</span>go env GOOS<span style="color:#66d9ef">)</span>/<span style="color:#66d9ef">$(</span>go env GOARCH<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;&amp;</span> chmod +x kubebuilder <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;&amp;</span> mv kubebuilder /usr/local/bin/
 </span></span></code></pre></div><p>If everything goes fine, you should see a similar output (the version might have changed depending on when you read this article).</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ kubebuilder version
 </span></span><span style="display:flex;"><span>Version: main.version<span style="color:#f92672">{</span>KubeBuilderVersion:<span style="color:#e6db74">&#34;3.13.0&#34;</span>, KubernetesVendor:<span style="color:#e6db74">&#34;1.27.1&#34;</span>, GitCommit:<span style="color:#e6db74">&#34;c8a7cc58eeb56586c019cf8845dad37286d077ff&#34;</span>, BuildDate:<span style="color:#e6db74">&#34;2023-11-02T20:43:44Z&#34;</span>, GoOs:<span style="color:#e6db74">&#34;darwin&#34;</span>, GoArch:<span style="color:#e6db74">&#34;amd64&#34;</span><span style="color:#f92672">}</span>
@@ -340,7 +343,8 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p><strong>Wait, what’s this controller component?!</strong></p>
 <p>This is going to be a bit theoretical. Hang on!</p>
 <blockquote>
-<p>An operator is made of two components, a custom resource definition (CRD) and a controller.</p></blockquote>
+<p>An operator is made of two components, a custom resource definition (CRD) and a controller.</p>
+</blockquote>
 <p>A CRD is a “Kubernetes custom type” or a blueprint of the resource, used to describe its specification and status. We can define instances of the CRD, called custom resources (or CR).</p>
 <figure class="align-center ">
     <img loading="lazy" src="fig-2-crd-cr.svg#center"
@@ -412,7 +416,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 <p>First, we install the CRDs into the cluster.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make install
 </span></span><span style="display:flex;"><span>test -s /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen <span style="color:#f92672">&amp;&amp;</span> /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen --version | grep -q v0.13.0 <span style="color:#f92672">||</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        GOBIN<span style="color:#f92672">=</span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+</span></span></span><span style="display:flex;"><span>        GOBIN<span style="color:#f92672">=</span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
 </span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName<span style="color:#f92672">=</span>manager-role crd webhook paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#f92672">=</span>config/crd/bases
 </span></span><span style="display:flex;"><span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/kustomize build config/crd | kubectl apply -f -
@@ -424,7 +428,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
 </span></span></code></pre></div><p>Then we run the controller in the terminal. Keep in mind that we can also deploy it as deployment in the Kubernetes cluster.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make run
 </span></span><span style="display:flex;"><span>test -s /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen <span style="color:#f92672">&amp;&amp;</span> /Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen --version | grep -q v0.13.0 <span style="color:#f92672">||</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>        GOBIN<span style="color:#f92672">=</span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+</span></span></span><span style="display:flex;"><span>        GOBIN<span style="color:#f92672">=</span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
 </span></span><span style="display:flex;"><span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen rbac:roleName<span style="color:#f92672">=</span>manager-role crd webhook paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span> output:crd:artifacts:config<span style="color:#f92672">=</span>config/crd/bases
 </span></span><span style="display:flex;"><span>/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v1/bin/controller-gen object:headerFile<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hack/boilerplate.go.txt&#34;</span> paths<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./...&#34;</span>
 </span></span><span style="display:flex;"><span>go fmt ./...
@@ -553,7 +557,7 @@ If you want to know more, you&rsquo;ve come to the right place!</p>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2025 <a href="https://leovct.github.io/">leovct.dev</a></span> · 
+        <span>&copy; 2026 <a href="https://leovct.github.io/">leovct.dev</a></span> · 
 
     <span>
         Powered by
