@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="en" dir="auto" data-theme="auto">
 
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,7 @@
 <meta name="description" content="Learn how to write unit and e2e tests for Kubernetes operators">
 <meta name="author" content="leovct">
 <link rel="canonical" href="https://leovct.github.io/posts/kubernetes/write-tests-for-operators/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.05e577b476f3628aca415e24cd867ec0154cc7dc933267440f69f25a4c57f47c.css" integrity="sha256-BeV3tHbzYorKQV4kzYZ&#43;wBVMx9yTMmdED2nyWkxX9Hw=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.4e9fe6ba10322b46f84b6fad7ec4c18e4c5986e62e1cd423bd95c1be09fafe76.css" integrity="sha256-Tp/muhAyK0b4S2&#43;tfsTBjkxZhuYuHNQjvZXBvgn6/nY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://leovct.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://leovct.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://leovct.github.io/favicon-32x32.png">
@@ -39,23 +39,32 @@
                 --code-block-bg: rgb(46, 46, 51);
                 --code-bg: rgb(55, 56, 62);
                 --border: rgb(51, 51, 51);
+                color-scheme: dark;
             }
 
             .list {
                 background: var(--theme);
             }
 
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
+            .toc {
+                background: var(--entry);
             }
         }
 
     </style>
 </noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-7BWGX7L5F0"></script>
       <script>
         var doNotTrack = false;
@@ -84,8 +93,8 @@
     <meta property="og:image" content="https://leovct.github.io/fig-1-cover.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://leovct.github.io/fig-1-cover.png">
-<meta name="twitter:title" content="🧪 Write tests for Kubernetes operators">
-<meta name="twitter:description" content="Learn how to write unit and e2e tests for Kubernetes operators">
+  <meta name="twitter:title" content="🧪 Write tests for Kubernetes operators">
+  <meta name="twitter:description" content="Learn how to write unit and e2e tests for Kubernetes operators">
 
 
 <script type="application/ld+json">
@@ -142,31 +151,19 @@
 }
 </script>
 </head>
-
-<body class="" id="top">
-<script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
-        document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
-    }
-
-</script>
-
-<header class="header">
-    <nav class="nav">
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
         <div class="logo">
             <a href="https://leovct.github.io/" accesskey="h" title="leovct.dev (Alt + H)">leovct.dev</a>
             <div class="logo-switches">
-                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
-                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
-                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
@@ -182,7 +179,7 @@
                 </button>
             </div>
         </div>
-        <ul id="menu">
+        <ul id="menu" class="menu">
             <li>
                 <a href="https://leovct.github.io/" title="home">
                     <span>home</span>
@@ -217,7 +214,11 @@
     <div class="post-description">
       Learn how to write unit and e2e tests for Kubernetes operators
     </div>
-    <div class="post-meta"><span title='2022-08-01 00:00:00 +0000 UTC'>August 1, 2022</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;1861 words&nbsp;·&nbsp;leovct&nbsp;|&nbsp;<a href="https://github.com/leovct/leovct.github.io/tree/main/content/posts/kubernetes/write-tests-for-operators/index.md" rel="noopener noreferrer edit" target="_blank">📝 Suggest changes</a>
+    <div class="post-meta">
+
+<span title='2022-08-01 00:00:00 +0000 UTC'>August 1, 2022</span>&nbsp;·&nbsp;<span>9 min</span>&nbsp;·&nbsp;<span>1861 words</span>&nbsp;·&nbsp;<span>leovct</span>&nbsp;|&nbsp;<span>
+        <a href="https://github.com/leovct/leovct.github.io/tree/main/content/posts/kubernetes/write-tests-for-operators/index.md" rel="noopener noreferrer edit" target="_blank">📝 Suggest changes</a>
+    </span>
 
 </div>
   </header> 
@@ -229,36 +230,34 @@
                 width="1920" height="1280"
                 alt="Fig 1. Photo from [Unsplash](https://unsplash.com/photos/aYHzEnSEH-w)">
         <figcaption>Fig 1. Photo from <a href="https://unsplash.com/photos/aYHzEnSEH-w">Unsplash</a></figcaption>
-</figure><div class="toc">
-    <details >
-        <summary accesskey="c" title="(Alt + C)">
-            <span class="details">Table of Contents</span>
-        </summary>
+</figure><details class="toc" >
+    <summary accesskey="c" title="(Alt + C)">
+        <span class="title">Table of Contents</span>
+    </summary>
 
-        <div class="inner"><ul>
-                <li>
-                    <a href="#the-different-types-of-tests" aria-label="The Different Types of Tests">The Different Types of Tests</a></li>
-                <li>
-                    <a href="#practical-work" aria-label="Practical Work">Practical Work</a><ul>
-                        
-                <li>
-                    <a href="#1-set-up-your-environment" aria-label="1. Set up your environment">1. Set up your environment</a></li>
-                <li>
-                    <a href="#2-some-context-on-the-operator" aria-label="2. Some context on the operator">2. Some context on the operator</a></li>
-                <li>
-                    <a href="#3-unit-tests" aria-label="3. Unit tests">3. Unit tests</a></li>
-                <li>
-                    <a href="#4-integration-tests" aria-label="4. Integration tests">4. Integration tests</a></li></ul>
-                </li>
-                <li>
-                    <a href="#to-go-further" aria-label="To Go Further">To Go Further</a>
-                </li>
-            </ul>
-        </div>
-    </details>
-</div>
+    <div class="inner"><ul>
+            <li>
+                <a href="#the-different-types-of-tests" aria-label="The Different Types of Tests">The Different Types of Tests</a></li>
+            <li>
+                <a href="#practical-work" aria-label="Practical Work">Practical Work</a><ul>
+                    
+            <li>
+                <a href="#1-set-up-your-environment" aria-label="1. Set up your environment">1. Set up your environment</a></li>
+            <li>
+                <a href="#2-some-context-on-the-operator" aria-label="2. Some context on the operator">2. Some context on the operator</a></li>
+            <li>
+                <a href="#3-unit-tests" aria-label="3. Unit tests">3. Unit tests</a></li>
+            <li>
+                <a href="#4-integration-tests" aria-label="4. Integration tests">4. Integration tests</a></li></ul>
+            </li>
+            <li>
+                <a href="#to-go-further" aria-label="To Go Further">To Go Further</a>
+            </li>
+        </ul>
+    </div>
+</details>
 
-  <div class="post-content"><p>You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!</p>
+  <div class="post-content md-content"><p>You know how to build a kubernetes operator? Cool. Now, it’s time to get serious!</p>
 <p>Let&rsquo;s write some tests to use our operator in production!</p>
 <p>In my previous <a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/">article</a>, I showed how to build a Kubernetes operator in about ten minutes - but you must be quick haha! I’ve also described the functioning of an operator, the custom resource definition and custom resources, the controllers, and the manager. If you want to learn more about these concepts, I highly recommend you read the article.</p>
 <p>But now it’s time to write some tests to use our operator in production! It’s a subject in its own right that is less complicated than it seems. Most people don’t like writing tests, but they are necessary. They help to improve code quality, detect bugs, and save time and money. So, let’s do some testing!</p>
@@ -277,10 +276,10 @@
 <p>I choose to use the <a href="https://book.kubebuilder.io/">Kubebuilder</a> framework to build Kubernetes operators. It’s very easy to use, the documentation is easy to read, and it’s a battle-tested product. It’s one of the two most popular Go frameworks to build operators, along with <a href="https://sdk.operatorframework.io/">Operator SDK</a>.</p>
 <p>I assume you already have the necessary tools to design an operator (<code>go</code>, <code>docker</code>, <code>kubectl</code>, <code>kubebuilder</code> and a small local Kubernetes cluster). But if this is not the case, I strongly recommend that you follow the following <a href="https://leovct.github.io/posts/build-a-kubernetes-operator-in-10-minutes/#1-set-up-your-environment">installation steps</a> so that you can follow along with me during this tutorial.</p>
 <p>To focus only on the testing part, I have prepared a simple Kubernetes operator, designed with Kubebuilder. This practical work will be to write tests to validate that the operator’s code meets our expectations and ensure that it does not contain any bugs. I’m going to ask you to clone the project and move to the <code>operator-v2</code> directory so we all start from the same base.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone git@github.com:leovct/kubernetes-operator-tutorial.git <span style="color:#ae81ff">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone git@github.com:leovct/kubernetes-operator-tutorial.git <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span>    <span style="color:#f92672">&amp;&amp;</span> cd kubernetes-operator-tutorial/operator-v2
 </span></span></code></pre></div><p>If you try to run tests, you’ll see that the coverage equals 0%. Indeed, we haven’t written any tests yet! But this is going to change!</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make test
 </span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>KUBEBUILDER_ASSETS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64&#34;</span> go test ./... -coverprofile cover.out
 </span></span><span style="display:flex;"><span>?       my.domain/tutorial/api/v1       <span style="color:#f92672">[</span>no test files<span style="color:#f92672">]</span>
@@ -317,7 +316,7 @@
 <script src="https://gist.github.com/leovct/e0d7563e278c1a4d25ea3e823d3515aa.js"></script>
 
 <p>Now, if you attempt to run the tests a second time, you’ll see that the code coverage of the <code>color</code> package is equal to 100%! Awesome, we did it! The function works as expected.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make test
 </span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>KUBEBUILDER_ASSETS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64&#34;</span> go test ./... -coverprofile cover.out
 </span></span><span style="display:flex;"><span>?       my.domain/tutorial/api/v1       <span style="color:#f92672">[</span>no test files<span style="color:#f92672">]</span>
@@ -346,7 +345,7 @@
 
 <p>These are fairly simple tests, but they show you the possibilities. You can do very complex things using the various tools provided by Ginkgo. If you paid attention during the tutorial, you should have seen various instructions such as <code>Expect</code>, <code>Eventually</code>, or <code>Consistently</code>, which are very useful methods to test the behaviour of the operator and the resources running in Kubernetes.</p>
 <p>We’ve written many great tests that cover our controller&rsquo;s scope. Now it’s time to run them to see if the operator passes them all.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make test
 </span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>KUBEBUILDER_ASSETS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/Users/leovct/Documents/projects/kubernetes-operator-tutorial/operator-v2/bin/k8s/1.28.0-darwin-amd64&#34;</span> go test ./... -coverprofile cover.out
 </span></span><span style="display:flex;"><span>?       my.domain/tutorial/api/v1       <span style="color:#f92672">[</span>no test files<span style="color:#f92672">]</span>
@@ -382,22 +381,31 @@
 <footer class="footer">
         <span>&copy; 2026 <a href="https://leovct.github.io/">leovct.dev</a></span> · 
 
+    
+    
     <span>
         Powered by
-        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
         <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
     </span>
 </footer>
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z" />
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
     </svg>
 </a>
 
 <script>
-    let menu = document.getElementById('menu')
+    let menu = document.getElementById('menu');
     if (menu) {
-        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
         menu.onscroll = function () {
             localStorage.setItem("menu-scroll-position", menu.scrollLeft);
         }
@@ -424,25 +432,25 @@
 
 </script>
 <script>
-    var mybutton = document.getElementById("top-link");
+    var toplink = document.getElementById("top-link");
     window.onscroll = function () {
-        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
-            mybutton.style.visibility = "visible";
-            mybutton.style.opacity = "1";
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
         } else {
-            mybutton.style.visibility = "hidden";
-            mybutton.style.opacity = "0";
+            toplink.classList.add("hidden");
         }
     };
 
 </script>
 <script>
     document.getElementById("theme-toggle").addEventListener("click", () => {
-        if (document.body.className.includes("dark")) {
-            document.body.classList.remove('dark');
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
             localStorage.setItem("pref-theme", 'light');
         } else {
-            document.body.classList.add('dark');
+            html.dataset.theme = 'dark';
             localStorage.setItem("pref-theme", 'dark');
         }
     })
