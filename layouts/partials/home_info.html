@@ -10,7 +10,7 @@
           class="profile-image"
           draggable="false"
           src="{{ .image.url | absURL }}"
-          alt=" {{ .image.title | default " profile image" }}"
+          alt="{{ .image.title | default "profile image" }}"
           title="{{ .image.title }}"
           height="{{ .image.height | default 150 }}"
           width="{{ .image.width | default 150 }}"
@@ -30,8 +30,15 @@
 
   <style>
     @media (max-width: 800px) {
+      .home-info-container {
+        flex-direction: column;
+        text-align: center;
+      }
+
       .profile-image {
-        display: none; /* Hide image on smaller screens */
+        width: 100px;
+        height: 100px;
+        margin: 0 0 16px 0;
       }
     }
   </style>
