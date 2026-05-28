@@ -6,7 +6,7 @@ summary: projects
 
 Some of the projects I have been working on lately, ranging from blockchain infrastructure to developer tooling and kubernetes stuff.
 
-## 2023-25
+## 2023-26
 
 ### 📦 Kurtosis Packages
 
