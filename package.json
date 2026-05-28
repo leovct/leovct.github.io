@@ -2,7 +2,7 @@
   "name": "website",
   "version": "1.0.0",
   "description": "Personal website",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "hugo server",
     "check": "pnpm exec prettier --check .",

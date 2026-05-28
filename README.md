@@ -35,7 +35,7 @@ Run the linter.
 pnpm run lint
 ```
 
-Update git submodules
+Update git submodules.
 
 ```bash
 pnpm run update
