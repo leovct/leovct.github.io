@@ -4,18 +4,28 @@ url: /projects
 summary: projects
 ---
 
-Some of the projects I have been working on lately, ranging from blockchain infrastructure to developer tooling and kubernetes stuff.
+Some of the projects I have been working on lately, ranging from blockchain infrastructure to developer tooling and Kubernetes platforms.
 
-## 2023-26
+## 2023-2026
+
+Deep dive into blockchain infrastructure and developer tooling at [Polygon Labs](https://polygon.technology/)
+
+### ✅ Reliability
+
+- Defining user journeys and establishing SLIs and SLOs to measure and improve service reliability
+- Implementing synthetic monitoring for Polygon's critical infrastructure (blockchain networks, AggLayer, OMS/BPN, web apps, etc.)
 
 ### 📦 Kurtosis Packages
 
-- [0xPolygon/kurtosis-cdk](https://github.com/0xPolygon/kurtosis-cdk/): A package that deploys a private, portable, and modular Polygon CDK devnet - maintainer + core contributor
-- [0xPolygon/kurtosis-pos](https://github.com/0xPolygon/kurtosis-pos): Same thing but for Polygon PoS - maintainer + core contributor
+Packages for reproducible blockchain devnets, enabling faster local development and integration testing across multiple stacks.
+
+- [0xPolygon/kurtosis-cdk](https://github.com/0xPolygon/kurtosis-cdk/): Polygon CDK stack - maintainer + core contributor
+- [0xPolygon/kurtosis-pos](https://github.com/0xPolygon/kurtosis-pos): Polygon PoS stack - maintainer + core contributor
+- [agglayer/optimism-package](https://github.com/agglayer/optimism-package): Optimism stack - maintainer
 
 ### 🔧 Blockchain Tools
 
-- [0xPolygon/polygon-cli](https://github.com/0xPolygon/polygon-cli/): Another blockchain toolkit - occasional contributor
+- [0xPolygon/polygon-cli](https://github.com/0xPolygon/polygon-cli/): CLI toolkit for blockchain development and operations - occasional contributor
 
 ### 💖 Open-source Contributions
 
@@ -24,13 +34,15 @@ Some of the projects I have been working on lately, ranging from blockchain infr
 - [paradigmxyz/reth](https://github.com/paradigmxyz/reth): Rust execution layer implementation of the Ethereum protocol
 - [mds1/evm-diff](https://github.com/mds1/evm-diff): Web UI to differentiate EVM-compatible chains
 
-## 2021-22
+## 2021-2022
+
+A fresh start in the world of platform engineering at [Renault Software Factory](https://x.com/renaultgroup)
 
 ### ☸️ Kubernetes Operators
 
 - Designed and implemented a Kubernetes operator to standardize configurations and automate deployments and updates of GitLab runners
-- Production deployment supervising 50+ runners, running 24/7 and executing thousands of jobs weekly
-- Wrote technical articles on building and testing Kubernetes operators
+- Production deployment managing 50+ runners, operating 24/7, and executing thousands of jobs per week
+- Wrote [technical articles](https://github.com/leovct/kube-operator-tutorial) on building and testing Kubernetes operators
 
 ### 👀 Monitoring
 
