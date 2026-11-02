@@ -6,3 +6,37 @@ p {
 .md-content h2[id='2021-2022'] {
   margin-top: 6rem;
 }
+
+/* Dialogue in the style of a messaging app */
+.chat {
+  position: relative;
+  width: fit-content;
+  max-width: 75%;
+  margin: 0.35rem 0;
+  padding: 0.45rem 0.9rem;
+  border-radius: 1.2rem;
+  line-height: 1.4;
+}
+
+.chat p {
+  margin: 0;
+  text-align: left;
+}
+
+.chat-left {
+  background: #e9e9eb;
+  color: #000;
+  border-bottom-left-radius: 0.3rem;
+}
+
+.chat-right {
+  margin-left: auto;
+  background: #0b84fe;
+  color: #fff;
+  border-bottom-right-radius: 0.3rem;
+}
+
+:root[data-theme='dark'] .chat-left {
+  background: #3a3a3c;
+  color: #fff;
+}
