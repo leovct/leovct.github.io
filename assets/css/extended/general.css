@@ -1,3 +1,8 @@
 p {
   text-align: justify;
 }
+
+/* Extra space before the older experience section */
+.md-content h2[id='2021-2022'] {
+  margin-top: 6rem;
+}
